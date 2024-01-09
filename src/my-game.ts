@@ -1,5 +1,10 @@
 import * as ECS from '../libs/pixi-ecs';
 
+const SCENE_WIDTH = 800;
+const SCENE_HEIGHT = 600;
+const RESOLUTION = 1;
+const BACK_GROUND_COLOR = 0xFFFFFFF;
+
 // TODO rename your game
 class MyGame {
 	engine: ECS.Engine;
@@ -11,9 +16,9 @@ class MyGame {
 		// init the game loop
 		this.engine.init(canvas, {
 			resizeToScreen: true,
-			width: 800,
-			height: 600,
-			resolution: 1,
+			width: SCENE_WIDTH,
+			height: SCENE_HEIGHT,
+			resolution: RESOLUTION,
 			flagsSearchEnabled: false, // searching by flags feature
 			statesSearchEnabled: false, // searching by states feature
 			tagsSearchEnabled: false, // searching by tags feature
@@ -23,7 +28,7 @@ class MyGame {
 			notifyFlagChanges: false, // will send message if flags change
 			notifyTagChanges: false, // will send message if tags change
 			debugEnabled: false, // debugging window
-			backgroundColor: 0xFFFFFFF
+			backgroundColor: BACK_GROUND_COLOR
 		});
 
 		this.engine.app.loader
