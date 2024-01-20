@@ -4,11 +4,14 @@ import * as PIXI from 'pixi.js';
 const SCENE_WIDTH = 800;
 const SCENE_HEIGHT = 600;
 const RESOLUTION = 1;
+const BALL_SIZE = 10;
 const BACK_GROUND_COLOR = 0xFFFFFFF;
 const GRAVITY = 0.05;
 const PLAYER_VERTICAL_SPEED = 18;
 const PLAYER_HORIZONTAL_SPEED = 0.8;
-const SLIDING = 0.9;
+const SLIDING = 0.7;
+
+
 
 type Vec = {
 	x: number;
@@ -71,19 +74,48 @@ class BallController extends ECS.Component {
 			return;
 		}
 		const bbox = this.owner.getBounds();
-		if(bbox.left >= 0 && bbox.right <= SCENE_WIDTH ){
+		this.owner.position.x += this.speed.x;
+		this.speed.x *= SLIDING;
+		if (Math.abs(this.speed.x) < 0.01) {
+			this.speed.x = 0;
+		}
+
+		/*else if(this.speed.x < 0 && this.owner.position.x + this.speed.x < this.owner.width/2){
+			this.speed.x = 0;
+		}else if(this.speed.x > 0 && this.owner.position.x + this.speed.x > SCENE_WIDTH - this.owner.width/2){
+			this.speed.x = 0;
+		}*/
+		/*if(bbox.left >= 0 && bbox.right <= SCENE_WIDTH ){
 			this.owner.position.x += this.speed.x;
 			this.speed.x *= SLIDING;
 			if (Math.abs(this.speed.x) < 0.01) {
 				this.speed.x = 0;
 			}
-		}else if(bbox.left < 0 ){
-			this.owner.position.x = 0 + this.owner.width;
-			this.speed.x = 0;
-		}else if(bbox.right > SCENE_WIDTH ){
-			this.owner.position.x = SCENE_WIDTH - this.owner.width;
+		}else{
+			if(bbox.left <= 0 ){
+				this.owner.position.x = this.owner.width;
+				this.speed.x = 0;
+			}else{
+				this.owner.position.x = SCENE_WIDTH - this.owner.width;
+				this.owner.position.x -= this.speed.x;
+				this.speed.x = 0;
+			}
+		}*/
+		/*if(this.owner.position.x + this.speed.x < 0){}this.owner.position.x + this.speed.x > SCENE_WIDTH)
+		this.owner.position.x += this.speed.x;
+		this.speed.x *= SLIDING;
+		if (Math.abs(this.speed.x) < 0.01) {
 			this.speed.x = 0;
 		}
+
+		if(bbox.left >= 0 && bbox.right <= SCENE_WIDTH ){
+			this.speed.x = 0
+			this.owner.position.x += this.speed.x;
+			this.speed.x *= SLIDING;
+			if (Math.abs(this.speed.x) < 0.01) {
+				this.speed.x = 0;
+			}
+		}*/
 
 		if(bbox.bottom > SCENE_HEIGHT){
 			this.speed.y = -PLAYER_VERTICAL_SPEED;
@@ -108,6 +140,7 @@ class BallController extends ECS.Component {
 		}
 	}
 }
+
 
 // TODO rename your game
 class MyGame {
@@ -148,9 +181,9 @@ class MyGame {
 		ball.addTag(Tags.BALL);
 		ball.beginFill(0xFFFFFF);
 		ball.lineStyle(1, 0x000000);
-		ball.drawCircle(0, 0, 12);
+		ball.drawCircle(0, 0, BALL_SIZE);
 		ball.endFill();
-		ball.pivot.set(7.5, 7.5);
+		ball.pivot.set(BALL_SIZE/2, BALL_SIZE/2);
 		ball.position.set(0.5 * 800 + 15, 0.9 * 600);
 		ball.addComponent(new BallController());
 		scene.stage.addChild(ball);
