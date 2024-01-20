@@ -1,145 +1,9 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-
-const SCENE_WIDTH = 800;
-const SCENE_HEIGHT = 600;
-const RESOLUTION = 1;
-const BALL_SIZE = 10;
-const BACK_GROUND_COLOR = 0xFFFFFFF;
-const GRAVITY = 0.05;
-const PLAYER_VERTICAL_SPEED = 18;
-const PLAYER_HORIZONTAL_SPEED = 0.8;
-const SLIDING = 0.7;
-
-
-
-type Vec = {
-	x: number;
-	y: number;
-}
-
-enum BallMoveStates {
-	STAND = 'STAND',
-	JUMP = 'JUMP',
-	FALL = 'FALL',
-}
-
-enum PlayerActions {
-	RIGHT = 1,
-	LEFT = -1,
-}
-
-enum Tags{
-	BALL = 'BALL',
-	COLORING = 'COLORING'
-}
-
-class BallController extends ECS.Component {
-	speed: Vec = { x: 0, y: 0 };
-	gravity: number = GRAVITY;
-	ballMoveState: BallMoveStates = BallMoveStates.STAND
-
-	onInit(){
-		this.ballMoveState = BallMoveStates.STAND;
-	}
-	onUpdate(delta: number, absolute: number) {
-		this.updateHorizontalMove(delta);
-		this.updateVerticalMove(delta);
-		this.checkCollisions();
-		this.applyDynamics(delta);
-	}
-
-	updateVerticalMove(delta: number){
-		if(this.ballMoveState === BallMoveStates.JUMP){
-			this.speed.y += this.gravity * delta;
-		} else if(this.ballMoveState === BallMoveStates.FALL){
-			this.speed.y += this.gravity * delta;
-		} else if(this.ballMoveState === BallMoveStates.STAND){
-			this.speed.y = -PLAYER_VERTICAL_SPEED;
-			this.ballMoveState = BallMoveStates.JUMP;
-		}
-	}
-	updateHorizontalMove(delta: number){
-		const keyInputComponent = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
-		const bbox = this.owner.getBounds();
-		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_LEFT)){
-			this.speed.x = PlayerActions.LEFT * Math.min(PLAYER_HORIZONTAL_SPEED * delta, bbox.left);
-		} else if (keyInputComponent.isKeyPressed(ECS.Keys.KEY_RIGHT)) {
-			this.speed.x = PlayerActions.RIGHT * Math.min(PLAYER_HORIZONTAL_SPEED * delta, SCENE_WIDTH - bbox.right);
-		}
-	}
-
-	applyDynamics(delta: number){
-		if (this.speed.x === 0 && this.speed.y === 0) {
-			return;
-		}
-		const bbox = this.owner.getBounds();
-		this.owner.position.x += this.speed.x;
-		this.speed.x *= SLIDING;
-		if (Math.abs(this.speed.x) < 0.01) {
-			this.speed.x = 0;
-		}
-
-		/*else if(this.speed.x < 0 && this.owner.position.x + this.speed.x < this.owner.width/2){
-			this.speed.x = 0;
-		}else if(this.speed.x > 0 && this.owner.position.x + this.speed.x > SCENE_WIDTH - this.owner.width/2){
-			this.speed.x = 0;
-		}*/
-		/*if(bbox.left >= 0 && bbox.right <= SCENE_WIDTH ){
-			this.owner.position.x += this.speed.x;
-			this.speed.x *= SLIDING;
-			if (Math.abs(this.speed.x) < 0.01) {
-				this.speed.x = 0;
-			}
-		}else{
-			if(bbox.left <= 0 ){
-				this.owner.position.x = this.owner.width;
-				this.speed.x = 0;
-			}else{
-				this.owner.position.x = SCENE_WIDTH - this.owner.width;
-				this.owner.position.x -= this.speed.x;
-				this.speed.x = 0;
-			}
-		}*/
-		/*if(this.owner.position.x + this.speed.x < 0){}this.owner.position.x + this.speed.x > SCENE_WIDTH)
-		this.owner.position.x += this.speed.x;
-		this.speed.x *= SLIDING;
-		if (Math.abs(this.speed.x) < 0.01) {
-			this.speed.x = 0;
-		}
-
-		if(bbox.left >= 0 && bbox.right <= SCENE_WIDTH ){
-			this.speed.x = 0
-			this.owner.position.x += this.speed.x;
-			this.speed.x *= SLIDING;
-			if (Math.abs(this.speed.x) < 0.01) {
-				this.speed.x = 0;
-			}
-		}*/
-
-		if(bbox.bottom > SCENE_HEIGHT){
-			this.speed.y = -PLAYER_VERTICAL_SPEED;
-			this.ballMoveState = BallMoveStates.JUMP;
-		}
-		if(this.owner.position.y + this.speed.y > this.owner.position.y){
-			this.ballMoveState = BallMoveStates.FALL;
-		}
-		this.owner.position.y += this.speed.y;
-	}
-
-	checkCollisions(){
-		const keyInputComponent = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
-		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_Q)){
-    		this.owner.asGraphics().tint = 0xFF0000;
-		}
-		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_W)){
-    		this.owner.asGraphics().tint = 0x00FF00;
-		}
-		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_E)){
-    		this.owner.asGraphics().tint = 0x0000FF;
-		}
-	}
-}
+import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_COLOR, BALL_SIZE} from './enums-and-constants';
+import {Tags} from './enums-and-constants';
+import {BallController} from './ball-controller';
+import {PlatformController} from './platform-controller';
 
 
 // TODO rename your game
@@ -175,6 +39,11 @@ class MyGame {
 	}
 
 	load() {
+		this.setBall();
+		this.setPlatforms();
+	}
+
+	setBall(){
 		let scene = this.engine.scene;
 		scene.addGlobalComponent(new ECS.KeyInputComponent());
 		let ball = new ECS.Graphics();
@@ -187,6 +56,22 @@ class MyGame {
 		ball.position.set(0.5 * 800 + 15, 0.9 * 600);
 		ball.addComponent(new BallController());
 		scene.stage.addChild(ball);
+	}
+	setPlatforms(){
+		let scene = this.engine.scene;
+		let platforms = new ECS.Container('platforms');
+		scene.stage.addChild(platforms);
+		let pos_y = SCENE_HEIGHT - PLATFORM_HEIGHT_DIF;
+		for(let i = 1; i < 7; i+=2){
+			let platform = new ECS.Graphics();
+			platform.beginFill(0xFF0000);
+			platform.lineStyle(1, 0x000000);
+			platform.drawRect(0, 0, 800/7, 10);
+			platform.endFill();
+			platform.position.set( 800/7 * i, pos_y - i * PLATFORM_HEIGHT_DIF);
+			platform.addComponent(new PlatformController());
+			platforms.addChild(platform);
+		}
 	}
 }
 // this will create a new instance as soon as this file is loaded
