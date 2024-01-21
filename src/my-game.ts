@@ -1,9 +1,10 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
 import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_COLOR, BALL_SIZE} from './enums-and-constants';
-import {Tags} from './enums-and-constants';
+import {Tags, Colors} from './enums-and-constants';
 import {BallController} from './ball-controller';
 import {PlatformController} from './platform-controller';
+import { PlatformGenerator } from './platform-generator';
 
 
 // TODO rename your game
@@ -49,7 +50,7 @@ class MyGame {
 		let ball = new ECS.Graphics();
 		ball.addTag(Tags.BALL);
 		ball.beginFill(0xFFFFFF);
-		ball.lineStyle(1, 0x000000);
+		ball.lineStyle(2, 0x000000);
 		ball.drawCircle(0, 0, BALL_SIZE);
 		ball.endFill();
 		ball.pivot.set(BALL_SIZE/2, BALL_SIZE/2);
@@ -59,18 +60,9 @@ class MyGame {
 	}
 	setPlatforms(){
 		let scene = this.engine.scene;
-		let platforms = new ECS.Container('platforms');
-		scene.stage.addChild(platforms);
-		let pos_y = SCENE_HEIGHT - PLATFORM_HEIGHT_DIF;
-		for(let i = 1; i < 7; i+=2){
-			let platform = new ECS.Graphics();
-			platform.beginFill(0xFF0000);
-			platform.lineStyle(1, 0x000000);
-			platform.drawRect(0, 0, 800/7, 10);
-			platform.endFill();
-			platform.position.set( 800/7 * i, pos_y - i * PLATFORM_HEIGHT_DIF);
-			platform.addComponent(new PlatformController());
-			platforms.addChild(platform);
+		let platformGenerator = new PlatformGenerator(this.engine.scene);
+		for(let i = 0; i < 3; i++){
+			platformGenerator.generateNewLine(3);
 		}
 	}
 }

@@ -1,27 +1,7 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {GRAVITY, PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED, SLIDING, SCENE_WIDTH, SCENE_HEIGHT} from './enums-and-constants';
-
-type Vec = {
-	x: number;
-	y: number;
-}
-
-enum BallMoveStates {
-	STAND = 'STAND',
-	JUMP = 'JUMP',
-	FALL = 'FALL',
-}
-
-enum PlayerActions {
-	RIGHT = 1,
-	LEFT = -1,
-}
-
-enum Tags{
-	BALL = 'BALL',
-	COLORING = 'COLORING'
-}
+import {GRAVITY, PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED, SLIDING, SCENE_WIDTH, SCENE_HEIGHT, Colors} from './enums-and-constants';
+import {Vec, BallMoveStates, MoveActions} from './enums-and-constants';
 
 export class BallController extends ECS.Component {
 	speed: Vec = { x: 0, y: 0 };
@@ -51,10 +31,10 @@ export class BallController extends ECS.Component {
 	updateHorizontalMove(delta: number){
 		const keyInputComponent = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
 		const bbox = this.owner.getBounds();
-		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_LEFT)){
-			this.speed.x = PlayerActions.LEFT * Math.min(PLAYER_HORIZONTAL_SPEED * delta, bbox.left);
-		} else if (keyInputComponent.isKeyPressed(ECS.Keys.KEY_RIGHT)) {
-			this.speed.x = PlayerActions.RIGHT * Math.min(PLAYER_HORIZONTAL_SPEED * delta, SCENE_WIDTH - bbox.right);
+		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_LEFT) || keyInputComponent.isKeyPressed(ECS.Keys.KEY_A)){
+			this.speed.x = MoveActions.LEFT * Math.min(PLAYER_HORIZONTAL_SPEED * delta, bbox.left) * 0.8;
+		} else if (keyInputComponent.isKeyPressed(ECS.Keys.KEY_RIGHT) || keyInputComponent.isKeyPressed(ECS.Keys.KEY_D)) {
+			this.speed.x = MoveActions.RIGHT * Math.min(PLAYER_HORIZONTAL_SPEED * delta, SCENE_WIDTH - bbox.right) * 0.8;
 		}
 	}
 
@@ -119,13 +99,13 @@ export class BallController extends ECS.Component {
 	checkCollisions(){
 		const keyInputComponent = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_Q)){
-    		this.owner.asGraphics().tint = 0xFF0000;
+    		this.owner.asGraphics().tint = Colors.RED;
 		}
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_W)){
-    		this.owner.asGraphics().tint = 0x00FF00;
+    		this.owner.asGraphics().tint = Colors.GREEN;
 		}
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_E)){
-    		this.owner.asGraphics().tint = 0x0000FF;
+    		this.owner.asGraphics().tint = Colors.BLUE;
 		}
 	}
 }
