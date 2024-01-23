@@ -43,3 +43,7 @@ export enum Colors {
 export enum Messages{
 	NEW_JUMP = 'NEW_JUMP',
 }
+
+export enum Attrs{
+	COLOR = 'COLOR',
+}

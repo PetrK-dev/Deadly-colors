@@ -28,7 +28,7 @@ export class PlatformGenerator extends ECS.Component{
 				this.createPlatform(
 					150 + 200 * i,
 					this.lastPlatformLinePosition_y,
-					randomColor,
+					randomColor as Colors,
 					100,
 					10
 				));
@@ -37,14 +37,15 @@ export class PlatformGenerator extends ECS.Component{
 		this.lastPlatformLinePosition_y -= PLATFORM_HEIGHT_DIF;
 	}
 
-	createPlatform(pos_x: number, pos_y: number, color: number, width: number, height: number): ECS.Graphics {
+	createPlatform(pos_x: number, pos_y: number, color: Colors, width: number, height: number): ECS.Graphics {
 		let platform = new ECS.Graphics(Tags.PLATFORM);
-		platform.beginFill(color);
+		platform.beginFill(0xFFFFFF);
 		platform.lineStyle(5, 0x000000);
 		platform.drawRect(0, 0, width, height);
 		platform.endFill();
 		platform.position.set( pos_x, pos_y);
 		platform.addComponent(new PlatformController());
+		platform.tint = color;
 		return platform;
 	}
 

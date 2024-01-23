@@ -1,16 +1,25 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
 import {GRAVITY, PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED, SLIDING, SCENE_WIDTH, SCENE_HEIGHT, Colors} from './enums-and-constants';
-import {Vec, BallMoveStates, MoveActions, Tags, Messages} from './enums-and-constants';
+import {Vec, BallMoveStates, MoveActions, Tags, Messages, Attrs} from './enums-and-constants';
 
 export class BallController extends ECS.Component {
 	speed: Vec = { x: 0, y: 0 };
 	gravity: number = GRAVITY;
 	ballMoveState: BallMoveStates = BallMoveStates.STAND
 
+	get color(){
+		return this.owner.getAttribute<Colors>(Attrs.COLOR);
+	}
+
+	set color(color: Colors){
+		this.owner.assignAttribute(Attrs.COLOR, color);
+	}
+
 	onInit(){
 		this.subscribe(Messages.NEW_JUMP);
 		this.ballMoveState = BallMoveStates.STAND;
+		this.color = this.owner.asGraphics().tint;
 	}
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP) {
@@ -110,12 +119,18 @@ export class BallController extends ECS.Component {
 		const keyInputComponent = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_Q)){
     		this.owner.asGraphics().tint = Colors.RED;
+			this.color = this.owner.asGraphics().tint;
+			this.color = Colors.RED;
 		}
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_W)){
     		this.owner.asGraphics().tint = Colors.GREEN;
+			this.color = this.owner.asGraphics().tint;
+			this.color = Colors.GREEN;
 		}
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_E)){
     		this.owner.asGraphics().tint = Colors.BLUE;
+			this.color = this.owner.asGraphics().tint;
+			this.color = Colors.BLUE;
 		}
 	}
 

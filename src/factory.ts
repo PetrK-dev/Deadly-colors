@@ -44,7 +44,7 @@ export class Factory{
 		this.scene.stage.addChild(ball);
 	}
 	buildPlatforms(){
-		for(let i = 0; i < 2; i++){
+		for(let i = 0; i < 3; i++){
 			this.platformGenerator.generateNewLine(3);
 		}
 	}

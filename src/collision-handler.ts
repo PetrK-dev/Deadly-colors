@@ -1,11 +1,12 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Tags, Messages, Colors} from './enums-and-constants';
+import {Tags, Messages, Colors, Attrs} from './enums-and-constants';
 
 export class CollisionHandler extends ECS.Component {
 	onUpdate(delta: number, absolute: number): void {
 		const ball = this.scene.findObjectByName(Tags.BALL);
 		const platforms = this.scene.findObjectsByName(Tags.PLATFORM);
+		//alert(`platforms: ${platforms}`);
 
 		const bbox = ball.getBounds();
 		for (let platform of platforms) {
@@ -13,11 +14,19 @@ export class CollisionHandler extends ECS.Component {
 			const horizIntersection = this.horizIntersection(bbox, cBox);
 			const vertIntersection = this.vertIntersection(bbox, cBox);
 
-			const collides = horizIntersection > 0 && vertIntersection > 0;
+			const collides = horizIntersection >= 0 && vertIntersection >= 0;
 			if(collides) {
-				this.sendMessage(Messages.NEW_JUMP);
+				const fillColor = platform.asGraphics().tint;
+				let ballColor = ball.getAttribute(Attrs.COLOR);
+				let platfromColor = platform.getAttribute(Attrs.COLOR);
+				//alert(`platfromColor: ${platfromColor}`);
+				//alert(`ballColor: ${ballColor}`);
+				if(ballColor === platfromColor){
+					this.sendMessage(Messages.NEW_JUMP);
+				}
 			}
 		}
+
 	}
 
 	private horizIntersection(boundsA: PIXI.Rectangle, boundsB: PIXI.Rectangle) {
