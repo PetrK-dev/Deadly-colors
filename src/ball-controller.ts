@@ -1,12 +1,10 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
 import {GRAVITY, PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED, SLIDING, SCENE_WIDTH, SCENE_HEIGHT, Colors} from './enums-and-constants';
-import {Vec, BallMoveStates, MoveActions, Tags, Messages, Attrs} from './enums-and-constants';
+import {Vec, MoveStates, MoveActions, Tags, Messages, Attrs} from './enums-and-constants';
 
 export class BallController extends ECS.Component {
 	speed: Vec = { x: 0, y: 0 };
-	gravity: number = GRAVITY;
-	ballMoveState: BallMoveStates = BallMoveStates.STAND
 
 	get color(){
 		return this.owner.getAttribute<Colors>(Attrs.COLOR);
@@ -16,16 +14,24 @@ export class BallController extends ECS.Component {
 		this.owner.assignAttribute(Attrs.COLOR, color);
 	}
 
+	get moveState(){
+		return this.owner.getAttribute<MoveStates>(Attrs.MOVE_STATE);
+	}
+
+	set moveState(moveState: MoveStates){
+		this.owner.assignAttribute(Attrs.MOVE_STATE, moveState);
+	}
+
 	onInit(){
 		this.subscribe(Messages.NEW_JUMP);
-		this.ballMoveState = BallMoveStates.STAND;
+		this.moveState = MoveStates.STAND;
 		this.color = this.owner.asGraphics().tint;
 	}
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP) {
-			if(this.ballMoveState === BallMoveStates.FALL){
+			if(this.moveState === MoveStates.FALL){
 				this.speed.y = -PLAYER_VERTICAL_SPEED;
-				this.ballMoveState = BallMoveStates.JUMP;
+				this.moveState = MoveStates.JUMP;
 			}
 		}
 	}
@@ -38,13 +44,13 @@ export class BallController extends ECS.Component {
 	}
 
 	updateVerticalMove(delta: number){
-		if(this.ballMoveState === BallMoveStates.JUMP){
-			this.speed.y += this.gravity * delta;
-		} else if(this.ballMoveState === BallMoveStates.FALL){
-			this.speed.y += this.gravity * delta;
-		} else if(this.ballMoveState === BallMoveStates.STAND){
+		if(this.moveState === MoveStates.JUMP){
+			this.speed.y += GRAVITY * delta;
+		} else if(this.moveState === MoveStates.FALL){
+			this.speed.y += GRAVITY * delta;
+		} else if(this.moveState === MoveStates.STAND){
 			this.speed.y = -PLAYER_VERTICAL_SPEED;
-			this.ballMoveState = BallMoveStates.JUMP;
+			this.moveState = MoveStates.JUMP;
 		}
 	}
 	updateHorizontalMove(delta: number){
@@ -107,10 +113,10 @@ export class BallController extends ECS.Component {
 
 		if(bbox.bottom > SCENE_HEIGHT){
 			this.speed.y = -PLAYER_VERTICAL_SPEED;
-			this.ballMoveState = BallMoveStates.JUMP;
+			this.moveState = MoveStates.JUMP;
 		}
 		if(this.owner.position.y + this.speed.y > this.owner.position.y){
-			this.ballMoveState = BallMoveStates.FALL;
+			this.moveState = MoveStates.FALL;
 		}
 		this.owner.position.y += this.speed.y;
 	}
@@ -132,13 +138,5 @@ export class BallController extends ECS.Component {
 			this.color = this.owner.asGraphics().tint;
 			this.color = Colors.BLUE;
 		}
-	}
-
-	horizIntersection = (boundsA: PIXI.Rectangle, boundsB: PIXI.Rectangle) => {
-		return Math.min(boundsA.right, boundsB.right) - Math.max(boundsA.left, boundsB.left);
-	}
-
-	vertIntersection = (boundsA: PIXI.Rectangle, boundsB: PIXI.Rectangle) => {
-		return Math.min(boundsA.bottom, boundsB.bottom) - Math.max(boundsA.top, boundsB.top);
 	}
 }

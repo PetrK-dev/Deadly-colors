@@ -14,7 +14,7 @@ export type Vec = {
 	y: number;
 }
 
-export enum BallMoveStates {
+export enum MoveStates {
 	STAND = 'STAND',
 	JUMP = 'JUMP',
 	FALL = 'FALL',
@@ -46,4 +46,5 @@ export enum Messages{
 
 export enum Attrs{
 	COLOR = 'COLOR',
+	MOVE_STATE = 'MOVE_STATE',
 }

@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Tags, Messages, Colors, Attrs} from './enums-and-constants';
+import {Tags, Messages, Colors, Attrs, MoveStates} from './enums-and-constants';
 
 export class CollisionHandler extends ECS.Component {
 	onUpdate(delta: number, absolute: number): void {
@@ -21,7 +21,7 @@ export class CollisionHandler extends ECS.Component {
 				let platfromColor = platform.getAttribute(Attrs.COLOR);
 				//alert(`platfromColor: ${platfromColor}`);
 				//alert(`ballColor: ${ballColor}`);
-				if(ballColor === platfromColor){
+				if(ballColor === platfromColor && ball.getAttribute(Attrs.MOVE_STATE )=== MoveStates.FALL){
 					this.sendMessage(Messages.NEW_JUMP);
 				}
 			}
