@@ -29,6 +29,9 @@ export class Factory{
 		this.scene.addGlobalComponent(new ECS.KeyInputComponent());
 		this.scene.addGlobalComponent(new CollisionHandler());
 		this.platformGenerator = new PlatformGenerator(this.scene);
+		this.scene.addGlobalComponent(this.platformGenerator);
+		this.buildStartPlatform();
+		this.buildPlatforms(10, 3);
 	}
 	endGame(){}
 	restartGame(){}
@@ -43,9 +46,9 @@ export class Factory{
 		ball.addComponent(new BallController());
 		this.scene.stage.addChild(ball);
 	}
-	buildPlatforms(){
-		for(let i = 0; i < 10; i++){
-			this.platformGenerator.generateNewLine(3);
+	buildPlatforms( numberOfLines: number, numberOfPlatforms: number){
+		for(let i = 0; i < numberOfLines; i++){
+			this.platformGenerator.generateNewLine(numberOfPlatforms);
 		}
 	}
 	buildStartPlatform(){}

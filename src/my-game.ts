@@ -41,7 +41,6 @@ class MyGame {
 		const factory = Factory.getInstance().initialize(scene);
 		Factory.getInstance().newGame();
 		Factory.getInstance().buildBall();
-		Factory.getInstance().buildPlatforms();
 	}
 }
 // this will create a new instance as soon as this file is loaded

@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags} from './enums-and-constants';
+import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages} from './enums-and-constants';
 import {PlatformController} from './platform-controller';
 
 
@@ -15,6 +15,21 @@ export class PlatformGenerator extends ECS.Component{
 		this.scene.stage.addChild(this.platforms);
 	}
 
+	onInit(){
+		this.subscribe(Messages.SCROLL);
+	}
+
+	onMessage(msg: ECS.Message): any {
+		if(msg.action === Messages.SCROLL){
+			this.lastPlatformLinePosition_y -= msg.data;
+			if(this.destoryOldPlatforms()){
+				this.generateNewLine(3);
+			}
+		}
+	}
+	setGenerator(){
+
+	}
 	generateNewLine(numberOfPlatforms: number){
 
 		const allColors: Colors[] = [Colors.GREEN, Colors.BLUE, Colors.RED, Colors.YELLOW, Colors.PURPLE];
@@ -49,7 +64,17 @@ export class PlatformGenerator extends ECS.Component{
 		return platform;
 	}
 
-	destoryOldLine(){
-
+	destoryOldPlatforms(): Boolean{
+		let lineDestroyed = false;
+		for (let i = this.platforms.children.length - 1; i >= 0; i--) {
+			const platform = this.platforms.children[i] as ECS.Graphics;
+			const cBox = platform.getBounds();
+			if(cBox.top > SCENE_HEIGHT){
+				this.platforms.removeChild(platform);
+				lineDestroyed = true;
+				//alert(`destroyed: ${lineDestroyed}`);
+			}
+		}
+		return lineDestroyed;
 	}
 }
