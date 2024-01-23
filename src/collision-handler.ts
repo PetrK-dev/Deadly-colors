@@ -1,28 +1,26 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Tags, Messages} from './enums-and-constants';
+import {Tags, Messages, Colors} from './enums-and-constants';
 
 export class CollisionHandler extends ECS.Component {
 	onUpdate(delta: number, absolute: number): void {
 		const ball = this.scene.findObjectByName(Tags.BALL);
-		const platforms = this.scene.findObjectsByName(Tags.PLATFORMS);
+		const platforms = this.scene.findObjectsByName(Tags.PLATFORM);
 		//alert(`ball: ${ball}`);
 		//alert(`platforms: ${platforms}`);
-		/*
+
 		const bbox = ball.getBounds();
 		for (let platform of platforms) {
 			const cBox = platform.getBounds();
-			const horizontal_intersection = this.horizIntersection(bbox, cBox);
-			const vertical_intersection = this.vertIntersection(bbox, cBox);
+			const horizIntersection = this.horizIntersection(bbox, cBox);
+			const vertIntersection = this.vertIntersection(bbox, cBox);
 			const topVertIntersection = this.topVertIntersection(ball, cBox);
 
-			const collides_from_top = horizontal_intersection > 0 && topVertIntersection;
-			if(collides_from_top) {
-				if( platform.asGraphics().tint === ball.asGraphics().tint){
-					this.sendMessage(Messages.NEW_JUMP);
-				}
+			const collides = horizIntersection > 0 && vertIntersection > 0;
+			if(collides) {
+				this.sendMessage(Messages.NEW_JUMP);
 			}
-		}*/
+		}
 
 	}
 

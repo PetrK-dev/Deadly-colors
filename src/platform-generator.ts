@@ -38,7 +38,7 @@ export class PlatformGenerator extends ECS.Component{
 	}
 
 	createPlatform(pos_x: number, pos_y: number, color: number, width: number, height: number): ECS.Graphics {
-		let platform = new ECS.Graphics();
+		let platform = new ECS.Graphics(Tags.PLATFORM);
 		platform.beginFill(color);
 		platform.lineStyle(5, 0x000000);
 		platform.drawRect(0, 0, width, height);

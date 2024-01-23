@@ -29,6 +29,7 @@ export enum Tags{
 	BALL = 'BALL',
 	COLORING = 'COLORING',
 	PLATFORMS = 'PLATFORMS',
+	PLATFORM = 'PLATFORM',
 }
 
 export enum Colors {

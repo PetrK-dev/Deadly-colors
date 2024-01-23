@@ -34,7 +34,6 @@ export class Factory{
 	restartGame(){}
 	buildBall(){
 		let ball = new ECS.Graphics(Tags.BALL);
-		ball.addTag(Tags.BALL);
 		ball.beginFill(0xFFFFFF);
 		ball.lineStyle(2, 0x000000);
 		ball.drawCircle(0, 0, BALL_SIZE);
@@ -45,7 +44,7 @@ export class Factory{
 		this.scene.stage.addChild(ball);
 	}
 	buildPlatforms(){
-		for(let i = 0; i < 3; i++){
+		for(let i = 0; i < 2; i++){
 			this.platformGenerator.generateNewLine(3);
 		}
 	}

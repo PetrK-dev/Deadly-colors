@@ -14,8 +14,10 @@ export class BallController extends ECS.Component {
 	}
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP) {
-			this.speed.y = -PLAYER_VERTICAL_SPEED;
-			this.ballMoveState = BallMoveStates.JUMP;
+			if(this.ballMoveState === BallMoveStates.FALL){
+				this.speed.y = -PLAYER_VERTICAL_SPEED;
+				this.ballMoveState = BallMoveStates.JUMP;
+			}
 		}
 	}
 
