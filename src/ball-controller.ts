@@ -1,7 +1,7 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
 import {GRAVITY, PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED, SLIDING, SCENE_WIDTH, SCENE_HEIGHT, Colors} from './enums-and-constants';
-import {Vec, BallMoveStates, MoveActions} from './enums-and-constants';
+import {Vec, BallMoveStates, MoveActions, Tags, Messages} from './enums-and-constants';
 
 export class BallController extends ECS.Component {
 	speed: Vec = { x: 0, y: 0 };
@@ -9,8 +9,16 @@ export class BallController extends ECS.Component {
 	ballMoveState: BallMoveStates = BallMoveStates.STAND
 
 	onInit(){
+		this.subscribe(Messages.NEW_JUMP);
 		this.ballMoveState = BallMoveStates.STAND;
 	}
+	onMessage(msg: ECS.Message): any {
+		if(msg.action === Messages.NEW_JUMP) {
+			this.speed.y = -PLAYER_VERTICAL_SPEED;
+			this.ballMoveState = BallMoveStates.JUMP;
+		}
+	}
+
 	onUpdate(delta: number, absolute: number) {
 		this.updateHorizontalMove(delta);
 		this.updateVerticalMove(delta);
@@ -107,5 +115,13 @@ export class BallController extends ECS.Component {
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_E)){
     		this.owner.asGraphics().tint = Colors.BLUE;
 		}
+	}
+
+	horizIntersection = (boundsA: PIXI.Rectangle, boundsB: PIXI.Rectangle) => {
+		return Math.min(boundsA.right, boundsB.right) - Math.max(boundsA.left, boundsB.left);
+	}
+
+	vertIntersection = (boundsA: PIXI.Rectangle, boundsB: PIXI.Rectangle) => {
+		return Math.min(boundsA.bottom, boundsB.bottom) - Math.max(boundsA.top, boundsB.top);
 	}
 }

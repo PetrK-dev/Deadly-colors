@@ -38,3 +38,7 @@ export enum Colors {
 	YELLOW = 0xFFFF00,
 	PURPLE = 0x800080,
 }
+
+export enum Messages{
+	NEW_JUMP = 'NEW_JUMP',
+}

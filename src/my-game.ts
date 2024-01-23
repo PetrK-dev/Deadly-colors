@@ -3,11 +3,8 @@ import * as PIXI from 'pixi.js';
 import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_COLOR, BALL_SIZE} from './enums-and-constants';
 import {Tags, Colors} from './enums-and-constants';
 import {BallController} from './ball-controller';
-import {PlatformController} from './platform-controller';
 import { PlatformGenerator } from './platform-generator';
-
-
-// TODO rename your game
+import { Factory } from './factory';
 class MyGame {
 	engine: ECS.Engine;
 
@@ -40,30 +37,11 @@ class MyGame {
 	}
 
 	load() {
-		this.setBall();
-		this.setPlatforms();
-	}
-
-	setBall(){
 		let scene = this.engine.scene;
-		scene.addGlobalComponent(new ECS.KeyInputComponent());
-		let ball = new ECS.Graphics();
-		ball.addTag(Tags.BALL);
-		ball.beginFill(0xFFFFFF);
-		ball.lineStyle(2, 0x000000);
-		ball.drawCircle(0, 0, BALL_SIZE);
-		ball.endFill();
-		ball.pivot.set(BALL_SIZE/2, BALL_SIZE/2);
-		ball.position.set(0.5 * 800 + 15, 0.9 * 600);
-		ball.addComponent(new BallController());
-		scene.stage.addChild(ball);
-	}
-	setPlatforms(){
-		let scene = this.engine.scene;
-		let platformGenerator = new PlatformGenerator(this.engine.scene);
-		for(let i = 0; i < 3; i++){
-			platformGenerator.generateNewLine(3);
-		}
+		const factory = Factory.getInstance().initialize(scene);
+		Factory.getInstance().newGame();
+		Factory.getInstance().buildBall();
+		Factory.getInstance().buildPlatforms();
 	}
 }
 // this will create a new instance as soon as this file is loaded

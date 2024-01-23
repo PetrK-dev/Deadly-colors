@@ -1,12 +1,12 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT} from './enums-and-constants';
+import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags} from './enums-and-constants';
 import {PlatformController} from './platform-controller';
 
 
 export class PlatformGenerator extends ECS.Component{
 	lastPlatformLinePosition_y: number = SCENE_HEIGHT - PLATFORM_HEIGHT_DIF;
-	platforms: ECS.Container = new ECS.Container('platforms');
+	platforms: ECS.Container = new ECS.Container(Tags.PLATFORMS);
 	scene: ECS.Scene;
 
 	public constructor(scene: ECS.Scene) {
@@ -23,8 +23,15 @@ export class PlatformGenerator extends ECS.Component{
 		for(let i = 0; i < numberOfPlatforms; i++){
 			const randomIndex = Math.floor(Math.random() * selectedColors.length);
      		const randomColor = selectedColors.splice(randomIndex, 1)[0];
-
-			this.platforms.addChild(this.createPlatform(150 + 200 * i, this.lastPlatformLinePosition_y, randomColor, 100, 10));
+			 //alert(`Random Color: ${Colors[randomColor]}`);
+			this.platforms.addChild(
+				this.createPlatform(
+					150 + 200 * i,
+					this.lastPlatformLinePosition_y,
+					randomColor,
+					100,
+					10
+				));
 	    }
 
 		this.lastPlatformLinePosition_y -= PLATFORM_HEIGHT_DIF;
