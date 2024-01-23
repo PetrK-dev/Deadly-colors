@@ -42,6 +42,7 @@ export enum Colors {
 
 export enum Messages{
 	NEW_JUMP = 'NEW_JUMP',
+	SCROLL = 'SCROLL',
 }
 
 export enum Attrs{

@@ -1,6 +1,7 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {MoveActions, Colors, Attrs} from './enums-and-constants';
+import {MoveActions, Colors, Attrs, Messages, GRAVITY} from './enums-and-constants';
+import {Scrollable} from './scrollable';
 
 const PLATFORM_SPEED = 50;
 
@@ -9,7 +10,7 @@ enum PlatformTypes {
 	MOVING = 1,
 }
 
-export class PlatformController extends ECS.Component{
+export class PlatformController extends Scrollable{
 
 	get color(){
 		return this.owner.getAttribute<Colors>(Attrs.COLOR);
@@ -20,12 +21,11 @@ export class PlatformController extends ECS.Component{
 	}
 
 	onInit(){
+		super.onInit();
 		this.color = this.owner.asGraphics().tint;
 	}
 
-	onUpdate(delta: number, absolute: number): void {
-		if(this.owner.stateId = PlatformTypes.MOVING){
-
-		}
+	onMessage(msg: ECS.Message) {
+		super.onMessage(msg);
 	}
 }

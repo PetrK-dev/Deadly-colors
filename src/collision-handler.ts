@@ -19,8 +19,6 @@ export class CollisionHandler extends ECS.Component {
 				const fillColor = platform.asGraphics().tint;
 				let ballColor = ball.getAttribute(Attrs.COLOR);
 				let platfromColor = platform.getAttribute(Attrs.COLOR);
-				//alert(`platfromColor: ${platfromColor}`);
-				//alert(`ballColor: ${ballColor}`);
 				if(ballColor === platfromColor && ball.getAttribute(Attrs.MOVE_STATE )=== MoveStates.FALL){
 					this.sendMessage(Messages.NEW_JUMP);
 				}

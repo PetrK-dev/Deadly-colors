@@ -5,6 +5,7 @@ import {Vec, MoveStates, MoveActions, Tags, Messages, Attrs} from './enums-and-c
 
 export class BallController extends ECS.Component {
 	speed: Vec = { x: 0, y: 0 };
+	tmpPosition_y: number;
 
 	get color(){
 		return this.owner.getAttribute<Colors>(Attrs.COLOR);
@@ -26,6 +27,7 @@ export class BallController extends ECS.Component {
 		this.subscribe(Messages.NEW_JUMP);
 		this.moveState = MoveStates.STAND;
 		this.color = this.owner.asGraphics().tint;
+		this.tmpPosition_y = this.owner.position.y;
 	}
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP) {
@@ -115,7 +117,11 @@ export class BallController extends ECS.Component {
 			this.speed.y = -PLAYER_VERTICAL_SPEED;
 			this.moveState = MoveStates.JUMP;
 		}
-		if(this.owner.position.y + this.speed.y > this.owner.position.y){
+		if(this.owner.position.y + this.speed.y < SCENE_HEIGHT / 2){
+			this.owner.position.y = SCENE_HEIGHT / 2;
+			this.sendMessage(Messages.SCROLL, this.speed.y);
+			return;
+		}else if( this.speed.y > 0){
 			this.moveState = MoveStates.FALL;
 		}
 		this.owner.position.y += this.speed.y;
