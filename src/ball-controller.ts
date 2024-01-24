@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {GRAVITY, PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED, SLIDING, SCENE_WIDTH, SCENE_HEIGHT, Colors} from './enums-and-constants';
+import {GRAVITY, PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED, SLIDING, SCENE_WIDTH, SCENE_HEIGHT, Colors, SCROLLING_HEIGHT} from './enums-and-constants';
 import {Vec, MoveStates, MoveActions, Tags, Messages, Attrs} from './enums-and-constants';
 
 export class BallController extends ECS.Component {
@@ -25,7 +25,7 @@ export class BallController extends ECS.Component {
 
 	onInit(){
 		this.subscribe(Messages.NEW_JUMP, Messages.NEW_COLOR);
-		this.moveState = MoveStates.STAND;
+		this.moveState = MoveStates.FALL;
 		this.color = this.owner.asGraphics().tint;
 		this.tmpPosition_y = this.owner.position.y;
 	}
@@ -120,8 +120,8 @@ export class BallController extends ECS.Component {
 			this.speed.y = -PLAYER_VERTICAL_SPEED;
 			this.moveState = MoveStates.JUMP;
 		}
-		if(this.owner.position.y + this.speed.y < SCENE_HEIGHT / 2){
-			this.owner.position.y = SCENE_HEIGHT / 2;
+		if(this.owner.position.y + this.speed.y < SCROLLING_HEIGHT){
+			this.owner.position.y = SCROLLING_HEIGHT;
 			this.sendMessage(Messages.SCROLL, this.speed.y);
 			return;
 		}else if( this.speed.y > 0){

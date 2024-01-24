@@ -28,19 +28,22 @@ export class Factory{
 	}
 
 	newGame(){
+		this.platformGenerator = new PlatformGenerator(this.scene);
+		this.colorlineGenerator = new ColorlineGenerator(this.scene);
+
 		this.scene.addGlobalComponent(new ECS.KeyInputComponent());
 		this.scene.addGlobalComponent(new CollisionHandler());
-		this.platformGenerator = new PlatformGenerator(this.scene);
 		this.scene.addGlobalComponent(this.platformGenerator);
-		this.colorlineGenerator = new ColorlineGenerator(this.scene);
 		this.scene.addGlobalComponent(this.colorlineGenerator);
-		this.buildStartPlatform();
+
+		let startColor: Colors;
+		startColor = this.buildStartPlatform();
 		this.buildPlatforms(5, 3);
-		//this.colorlineGenerator.generateNewColorline(3);
+		this.buildBall(startColor);
 	}
 	endGame(){}
 	restartGame(){}
-	buildBall(){
+	buildBall(startColor: Colors){
 		let ball = new ECS.Graphics(Tags.BALL);
 		ball.beginFill(0xFFFFFF);
 		ball.lineStyle(2, 0x000000);
@@ -49,6 +52,7 @@ export class Factory{
 		ball.pivot.set(BALL_SIZE/2, BALL_SIZE/2);
 		ball.position.set(0.5 * 800 + 15, 0.9 * 600);
 		ball.addComponent(new BallController());
+		ball.tint = startColor;
 		this.scene.stage.addChild(ball);
 	}
 	buildPlatforms( numberOfLines: number, numberOfPlatforms: number){
@@ -56,5 +60,9 @@ export class Factory{
 			this.platformGenerator.generateNewLine(numberOfPlatforms);
 		}
 	}
-	buildStartPlatform(){}
+	buildStartPlatform(): Colors{
+		let startPlatformColor: Colors = Colors.RED;
+		this.platformGenerator.createStartPlatform(startPlatformColor);
+		return startPlatformColor;
+	}
 }

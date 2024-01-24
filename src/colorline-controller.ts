@@ -4,7 +4,7 @@ import {Colors, Attrs, Messages, Vec} from './enums-and-constants';
 import {Scrollable} from './scrollable';
 
 export class ColorlineController extends Scrollable{
-	speed: Vec = { x: 0, y: 1 };
+	speed: Vec = { x: 0, y: 2 };
 
 	get color(){
 		return this.owner.getAttribute<Colors>(Attrs.COLOR);
@@ -17,6 +17,7 @@ export class ColorlineController extends Scrollable{
 	onInit(){
 		super.onInit();
 		this.color = this.owner.asGraphics().tint;
+		this.speed.y = Math.random() * 3 + 1;
 	}
 
 	onMessage(msg: ECS.Message) {

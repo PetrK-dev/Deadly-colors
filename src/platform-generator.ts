@@ -1,11 +1,11 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages} from './enums-and-constants';
+import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH} from './enums-and-constants';
 import {PlatformController} from './platform-controller';
 
 
 export class PlatformGenerator extends ECS.Component{
-	lastPlatformLinePosition_y: number = SCENE_HEIGHT - PLATFORM_HEIGHT_DIF;
+	lastPlatformLinePosition_y: number = SCENE_HEIGHT - 12;
 	platforms: ECS.Container = new ECS.Container(Tags.PLATFORMS);
 	scene: ECS.Scene;
 
@@ -77,4 +77,17 @@ export class PlatformGenerator extends ECS.Component{
 		}
 		return lineDestroyed;
 	}
+	createStartPlatform(startPlatformColor: Colors){
+		this.platforms.addChild(
+			this.createPlatform(
+				0,
+				this.lastPlatformLinePosition_y,
+				startPlatformColor,
+				SCENE_WIDTH,
+				10
+			));
+
+		this.lastPlatformLinePosition_y -= PLATFORM_HEIGHT_DIF;
+	}
+
 }
