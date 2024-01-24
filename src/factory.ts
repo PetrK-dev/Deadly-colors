@@ -4,11 +4,13 @@ import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_
 import {Tags, Colors} from './enums-and-constants';
 import {BallController} from './ball-controller';
 import { PlatformGenerator } from './platform-generator';
+import { ColorlineGenerator } from './colorline-generator';
 import { CollisionHandler } from './collision-handler';
 
 export class Factory{
 	scene: ECS.Scene;
 	platformGenerator: PlatformGenerator;
+	colorlineGenerator: ColorlineGenerator;
 
 	private static instance: Factory;
 
@@ -30,8 +32,11 @@ export class Factory{
 		this.scene.addGlobalComponent(new CollisionHandler());
 		this.platformGenerator = new PlatformGenerator(this.scene);
 		this.scene.addGlobalComponent(this.platformGenerator);
+		this.colorlineGenerator = new ColorlineGenerator(this.scene);
+		this.scene.addGlobalComponent(this.colorlineGenerator);
 		this.buildStartPlatform();
-		this.buildPlatforms(10, 3);
+		this.buildPlatforms(5, 3);
+		//this.colorlineGenerator.generateNewColorline(3);
 	}
 	endGame(){}
 	restartGame(){}

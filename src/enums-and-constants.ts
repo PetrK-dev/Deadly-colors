@@ -30,6 +30,8 @@ export enum Tags{
 	COLORING = 'COLORING',
 	PLATFORMS = 'PLATFORMS',
 	PLATFORM = 'PLATFORM',
+	COLORLINE = 'COLORLINE',
+	COLORLINES = 'COLORLINES',
 }
 
 export enum Colors {
