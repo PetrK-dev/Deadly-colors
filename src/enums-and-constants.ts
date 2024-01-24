@@ -1,6 +1,6 @@
 export const SCENE_WIDTH = 800;
 export const SCENE_HEIGHT = 600;
-export const SCROLLING_HEIGHT = SCENE_HEIGHT / 2;
+export const SCROLLING_HEIGHT = SCENE_HEIGHT/2;
 export const RESOLUTION = 1;
 export const BALL_SIZE = 10;
 export const BACK_GROUND_COLOR = 0xFFFFFFF;
@@ -8,7 +8,7 @@ export const GRAVITY = 0.02;
 export const PLAYER_VERTICAL_SPEED = 13;
 export const PLAYER_HORIZONTAL_SPEED = 0.8;
 export const SLIDING = 0.7;
-export const PLATFORM_HEIGHT_DIF = 145;
+export const PLATFORM_HEIGHT_DIF = 150;
 
 export type Vec = {
 	x: number;

@@ -17,7 +17,7 @@ export class ColorlineController extends Scrollable{
 	onInit(){
 		super.onInit();
 		this.color = this.owner.asGraphics().tint;
-		this.speed.y = Math.random() * 3 + 1;
+		this.speed.y = Math.random() * 2 + 1;
 	}
 
 	onMessage(msg: ECS.Message) {

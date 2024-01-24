@@ -46,7 +46,7 @@ export class ColorlineGenerator extends ECS.Component{
 		this.colorlines.addChild(
 			this.createColorline(
 				0,
-				-10,
+				-100,
 				randomColor as Colors,
 				SCENE_WIDTH,
 				5

@@ -54,8 +54,7 @@ export class BallController extends ECS.Component {
 		} else if(this.moveState === MoveStates.FALL){
 			this.speed.y += GRAVITY * delta;
 		} else if(this.moveState === MoveStates.STAND){
-			this.speed.y = -PLAYER_VERTICAL_SPEED;
-			this.moveState = MoveStates.JUMP;
+
 		}
 	}
 	updateHorizontalMove(delta: number){

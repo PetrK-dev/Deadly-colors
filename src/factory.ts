@@ -25,9 +25,6 @@ export class Factory{
 
 	public initialize(scene: ECS.Scene) {
 		this.scene = scene;
-	}
-
-	newGame(){
 		this.platformGenerator = new PlatformGenerator(this.scene);
 		this.colorlineGenerator = new ColorlineGenerator(this.scene);
 
@@ -35,7 +32,9 @@ export class Factory{
 		this.scene.addGlobalComponent(new CollisionHandler());
 		this.scene.addGlobalComponent(this.platformGenerator);
 		this.scene.addGlobalComponent(this.colorlineGenerator);
+	}
 
+	newGame(){
 		let startColor: Colors;
 		startColor = this.buildStartPlatform();
 		this.buildPlatforms(5, 3);
@@ -61,8 +60,8 @@ export class Factory{
 		}
 	}
 	buildStartPlatform(): Colors{
-		let startPlatformColor: Colors = Colors.RED;
-		this.platformGenerator.createStartPlatform(startPlatformColor);
+		let startPlatformColor: Colors;
+		startPlatformColor = this.platformGenerator.createStartPlatform();
 		return startPlatformColor;
 	}
 }
