@@ -22,7 +22,7 @@ export class ColorlineGenerator extends ECS.Component{
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP){
 			const randomChance = Math.random() * 100;
-			const chance = 60;
+			const chance = 80;
 			if (randomChance < chance) {
 				this.generateNewColorline(3);
 			}

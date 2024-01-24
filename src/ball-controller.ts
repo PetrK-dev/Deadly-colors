@@ -24,17 +24,20 @@ export class BallController extends ECS.Component {
 	}
 
 	onInit(){
-		this.subscribe(Messages.NEW_JUMP);
+		this.subscribe(Messages.NEW_JUMP, Messages.NEW_COLOR);
 		this.moveState = MoveStates.STAND;
 		this.color = this.owner.asGraphics().tint;
 		this.tmpPosition_y = this.owner.position.y;
 	}
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP) {
-			if(this.moveState === MoveStates.FALL){
-				this.speed.y = -PLAYER_VERTICAL_SPEED;
-				this.moveState = MoveStates.JUMP;
-			}
+			this.speed.y = -PLAYER_VERTICAL_SPEED;
+			this.moveState = MoveStates.JUMP;
+		}
+		if(msg.action === Messages.NEW_COLOR){
+			this.owner.asGraphics().tint = msg.data;
+			this.color = this.owner.asGraphics().tint;
+			 //alert(`Random Color: ${Colors[randomColor]}`);
 		}
 	}
 
