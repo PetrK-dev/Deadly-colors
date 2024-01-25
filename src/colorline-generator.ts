@@ -8,6 +8,11 @@ export class ColorlineGenerator extends ECS.Component{
 	scene: ECS.Scene;
 	colorlines: ECS.Container = new ECS.Container(Tags.COLORLINES);
 	lastColor: Colors;
+	numOfColors: number = 3;
+	minChanceOfNewLine: number;
+	chanceOfNewLine: number;
+	chanceDiff: number = 0.05;
+
 
 	public constructor(scene: ECS.Scene) {
 		super();
@@ -22,14 +27,18 @@ export class ColorlineGenerator extends ECS.Component{
 	restart(){
 		this.colorlines.removeChildren();
 		this.scene.stage.addChild(this.colorlines);
+		this.minChanceOfNewLine = 0.6;
+		this.chanceOfNewLine = this.minChanceOfNewLine;
 	}
 
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP){
-			const randomChance = Math.random() * 100;
-			const chance = 80;
-			if (randomChance < chance) {
-				this.generateNewColorline(3);
+			const randomChance = Math.random();
+			if (randomChance < this.chanceOfNewLine) {
+				this.generateNewColorline(this.numOfColors);
+				this.chanceOfNewLine = this.minChanceOfNewLine;
+			}else{
+				this.chanceOfNewLine += this.chanceDiff;
 			}
 		}
 	}
@@ -37,7 +46,10 @@ export class ColorlineGenerator extends ECS.Component{
 	onUpdate(delta: number, absolute: number): void {
 	}
 
-	setGenerator(){}
+	setGenerator(numOfColors: number, chanceOfNewLine: number){
+		this.numOfColors = numOfColors;
+		this.chanceOfNewLine = chanceOfNewLine;
+	}
 
 	generateNewColorline(numberOfcolors: number){
 		const allColors: Colors[] = [Colors.GREEN, Colors.BLUE, Colors.RED, Colors.YELLOW, Colors.PURPLE];
