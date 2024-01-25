@@ -5,14 +5,24 @@ import {PlatformController} from './platform-controller';
 
 
 export class PlatformGenerator extends ECS.Component{
-	lastPlatformLinePosition_y: number = SCENE_HEIGHT - 12;
-	platforms: ECS.Container = new ECS.Container(Tags.PLATFORMS);
 	scene: ECS.Scene;
+	platforms: ECS.Container = new ECS.Container(Tags.PLATFORMS);
+	lastPlatformLinePosition_y: number;
+	numOfColors: number = 3;
+	platWidth: number;
+	platHeight: number;
+	lineStyle: number;
+	random_x: boolean = true;
 
 	public constructor(scene: ECS.Scene) {
 		super();
 		this.scene = scene;
 		this.scene.stage.addChild(this.platforms);
+		this.platWidth = SCENE_WIDTH / ( 2 * this.numOfColors);
+		this.platHeight = SCENE_HEIGHT * 0.013;
+		this.lastPlatformLinePosition_y = SCENE_HEIGHT - this.platHeight;
+		this.lineStyle = this.platHeight / 2;
+		this.random_x = true;
 	}
 
 	onInit(){
@@ -23,29 +33,43 @@ export class PlatformGenerator extends ECS.Component{
 		if(msg.action === Messages.SCROLL){
 			this.lastPlatformLinePosition_y -= msg.data;
 			if(this.destoryOldPlatforms()){
-				this.generateNewLine(3);
+				this.generateNewLine();
 			}
 		}
 	}
-	setGenerator(){
-
+	setGenerator(numOfColors: number){
+		this.numOfColors = numOfColors;
 	}
-	generateNewLine(numberOfPlatforms: number){
+	generateNewLine(){
 
 		const allColors: Colors[] = [Colors.GREEN, Colors.BLUE, Colors.RED, Colors.YELLOW, Colors.PURPLE];
-		const selectedColors = allColors.slice(0, numberOfPlatforms);
+		const selectedColors = allColors.slice(0, this.numOfColors);
 
-		for(let i = 0; i < numberOfPlatforms; i++){
+		const gapBetweenPlatforms = (SCENE_WIDTH - (this.platWidth * this.numOfColors)) / (this.numOfColors + 1);
+		let randomStartPosition_x = 0 + this.platWidth/5;
+		let randomEndPosition_x = SCENE_WIDTH - this.platWidth/5*this.numOfColors - this.platWidth*(this.numOfColors);
+		let position_x = 0 - this.platWidth;
+
+		for(let i = 0; i < this.numOfColors; i++){
+
+			if(this.random_x){
+				randomStartPosition_x = position_x + this.platWidth * 6/5;
+				randomEndPosition_x = SCENE_WIDTH - this.platWidth / 5 * (this.numOfColors - i) - this.platWidth * (this.numOfColors - i);
+				position_x = Math.floor(Math.random() * (randomEndPosition_x * (0.8 + i * 0.2 / this.numOfColors) - randomStartPosition_x + 1)) + randomStartPosition_x;
+			}else{
+				position_x = gapBetweenPlatforms + i * (this.platWidth + gapBetweenPlatforms);
+			}
+
 			const randomIndex = Math.floor(Math.random() * selectedColors.length);
      		const randomColor = selectedColors.splice(randomIndex, 1)[0];
-			 //alert(`Random Color: ${Colors[randomColor]}`);
+
 			this.platforms.addChild(
 				this.createPlatform(
-					150 + 200 * i,
+					position_x,
 					this.lastPlatformLinePosition_y,
 					randomColor as Colors,
-					100,
-					10
+					this.platWidth,
+					this.platHeight
 				));
 	    }
 
@@ -55,7 +79,7 @@ export class PlatformGenerator extends ECS.Component{
 	createPlatform(pos_x: number, pos_y: number, color: Colors, width: number, height: number): ECS.Graphics {
 		let platform = new ECS.Graphics(Tags.PLATFORM);
 		platform.beginFill(0xFFFFFF);
-		platform.lineStyle(5, 0x000000);
+		platform.lineStyle(this.lineStyle, 0x000000);
 		platform.drawRect(0, 0, width, height);
 		platform.endFill();
 		platform.position.set( pos_x, pos_y);
@@ -82,8 +106,11 @@ export class PlatformGenerator extends ECS.Component{
 		let startPlatformColor: Colors;
 		startPlatformColor = this.buildStartPlatform();
 
-		for(let i = 0; i < 4; i++){
-			this.generateNewLine(3);
+		//this.generateNewLine();
+		//this.setGenerator(3);
+
+		while(this.lastPlatformLinePosition_y > - 2 * this.platHeight ){
+			this.generateNewLine();
 		}
 
 		return startPlatformColor;
@@ -98,7 +125,7 @@ export class PlatformGenerator extends ECS.Component{
 				this.lastPlatformLinePosition_y,
 				startPlatformColor,
 				SCENE_WIDTH,
-				10
+				this.platHeight
 			));
 
 		this.lastPlatformLinePosition_y -= PLATFORM_HEIGHT_DIF;

@@ -1,5 +1,5 @@
-export const SCENE_WIDTH = 800;
-export const SCENE_HEIGHT = 600;
+export const SCENE_WIDTH = 600;
+export const SCENE_HEIGHT = 800;
 export const SCROLLING_HEIGHT = SCENE_HEIGHT/2;
 export const RESOLUTION = 1;
 export const BALL_SIZE = 10;
@@ -41,6 +41,7 @@ export enum Colors {
 	GREEN = 0x00FF00,
 	YELLOW = 0xFFFF00,
 	PURPLE = 0x800080,
+	GOLDEN = 0xFFD700,
 }
 
 export enum Messages{
