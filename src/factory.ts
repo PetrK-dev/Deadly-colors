@@ -36,12 +36,16 @@ export class Factory{
 
 	newGame(){
 		let startColor: Colors;
-		startColor = this.buildStartPlatform();
-		this.buildPlatforms(5, 3);
+		startColor = this.platformGenerator.buildStartPlatforms();
 		this.buildBall(startColor);
 	}
-	endGame(){}
-	restartGame(){}
+	endGame(){
+		this.scene.stage.removeChildren();
+	}
+	restartGame(){
+		this.endGame();
+		this.newGame();
+	}
 	buildBall(startColor: Colors){
 		let ball = new ECS.Graphics(Tags.BALL);
 		ball.beginFill(0xFFFFFF);
@@ -53,15 +57,5 @@ export class Factory{
 		ball.addComponent(new BallController());
 		ball.tint = startColor;
 		this.scene.stage.addChild(ball);
-	}
-	buildPlatforms( numberOfLines: number, numberOfPlatforms: number){
-		for(let i = 0; i < numberOfLines; i++){
-			this.platformGenerator.generateNewLine(numberOfPlatforms);
-		}
-	}
-	buildStartPlatform(): Colors{
-		let startPlatformColor: Colors;
-		startPlatformColor = this.platformGenerator.createStartPlatform();
-		return startPlatformColor;
 	}
 }

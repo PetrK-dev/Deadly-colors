@@ -77,8 +77,21 @@ export class PlatformGenerator extends ECS.Component{
 		}
 		return lineDestroyed;
 	}
-	createStartPlatform(): Colors{
+
+	buildStartPlatforms(): Colors{
+		let startPlatformColor: Colors;
+		startPlatformColor = this.buildStartPlatform();
+
+		for(let i = 0; i < 4; i++){
+			this.generateNewLine(3);
+		}
+
+		return startPlatformColor;
+	}
+
+	buildStartPlatform(): Colors{
 		let startPlatformColor: Colors = Colors.RED;
+
 		this.platforms.addChild(
 			this.createPlatform(
 				0,
@@ -91,5 +104,4 @@ export class PlatformGenerator extends ECS.Component{
 		this.lastPlatformLinePosition_y -= PLATFORM_HEIGHT_DIF;
 		return startPlatformColor;
 	}
-
 }
