@@ -40,6 +40,7 @@ class MyGame {
 		let scene = this.engine.scene;
 		const factory = Factory.getInstance().initialize(scene);
 		Factory.getInstance().newGame();
+		Factory.getInstance().restartGame();
 	}
 }
 // this will create a new instance as soon as this file is loaded

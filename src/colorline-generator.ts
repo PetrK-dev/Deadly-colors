@@ -12,11 +12,16 @@ export class ColorlineGenerator extends ECS.Component{
 	public constructor(scene: ECS.Scene) {
 		super();
 		this.scene = scene;
-		this.scene.stage.addChild(this.colorlines);
+		this.restart();
 	}
 
 	onInit(){
 		this.subscribe(Messages.NEW_JUMP);
+	}
+
+	restart(){
+		this.colorlines.removeChildren();
+		this.scene.stage.addChild(this.colorlines);
 	}
 
 	onMessage(msg: ECS.Message): any {

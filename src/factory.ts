@@ -44,6 +44,8 @@ export class Factory{
 	}
 	restartGame(){
 		this.endGame();
+		this.platformGenerator.restart();
+		this.colorlineGenerator.restart();
 		this.newGame();
 	}
 	buildBall(startColor: Colors){

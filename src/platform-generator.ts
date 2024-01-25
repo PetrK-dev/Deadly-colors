@@ -12,11 +12,16 @@ export class PlatformGenerator extends ECS.Component{
 	platWidth: number;
 	platHeight: number;
 	lineStyle: number;
-	random_x: boolean = true;
+	random_x: boolean = false;
 
 	public constructor(scene: ECS.Scene) {
 		super();
 		this.scene = scene;
+		this.restart();
+	}
+
+	restart(){
+		this.platforms.removeChildren();
 		this.scene.stage.addChild(this.platforms);
 		this.platWidth = SCENE_WIDTH / ( 2 * this.numOfColors);
 		this.platHeight = SCENE_HEIGHT * 0.013;
