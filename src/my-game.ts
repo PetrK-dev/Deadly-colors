@@ -5,6 +5,9 @@ import {Tags, Colors} from './enums-and-constants';
 import {BallController} from './ball-controller';
 import { PlatformGenerator } from './platform-generator';
 import { Factory } from './factory';
+import { GameManager } from './game-manager';
+import { CollisionHandler } from './collision-handler';
+import { SceneManager } from './scene-manager';
 class MyGame {
 	engine: ECS.Engine;
 
@@ -38,8 +41,11 @@ class MyGame {
 
 	load() {
 		let scene = this.engine.scene;
-		const factory = Factory.getInstance().initialize(scene);
-		Factory.getInstance().newGame();
+		scene.addGlobalComponent(new ECS.KeyInputComponent());
+		scene.addGlobalComponent(new CollisionHandler());
+		//scene.addGlobalComponentAndRun(new SceneManager(scene));
+		//scene.addGlobalComponent(new SceneManager(scene));
+		scene.addGlobalComponentAndRun(new GameManager(scene));
 	}
 }
 // this will create a new instance as soon as this file is loaded

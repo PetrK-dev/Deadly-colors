@@ -24,8 +24,8 @@ export class BallController extends ECS.Component {
 	}
 
 	onInit(){
-		this.subscribe(Messages.NEW_JUMP, Messages.NEW_COLOR);
-		this.moveState = MoveStates.FALL;
+		this.subscribe(Messages.NEW_JUMP, Messages.NEW_COLOR, Messages.GAME_RUN);
+		this.moveState = MoveStates.STAND;
 		this.color = this.owner.asGraphics().tint;
 		this.tmpPosition_y = this.owner.position.y;
 	}
@@ -38,6 +38,9 @@ export class BallController extends ECS.Component {
 			this.owner.asGraphics().tint = msg.data;
 			this.color = this.owner.asGraphics().tint;
 			 //alert(`Random Color: ${Colors[randomColor]}`);
+		}
+		if(msg.action === Messages.GAME_RUN) {
+			this.moveState = MoveStates.FALL;
 		}
 	}
 
@@ -54,7 +57,8 @@ export class BallController extends ECS.Component {
 		} else if(this.moveState === MoveStates.FALL){
 			this.speed.y += GRAVITY * delta;
 		} else if(this.moveState === MoveStates.STAND){
-
+			this.speed.y = 0;
+			this.speed.x = 0;
 		}
 	}
 	updateHorizontalMove(delta: number){
@@ -117,7 +121,8 @@ export class BallController extends ECS.Component {
 
 		if(bbox.bottom > SCENE_HEIGHT){
 			this.speed.y = -PLAYER_VERTICAL_SPEED;
-			this.moveState = MoveStates.JUMP;
+			this.moveState = MoveStates.STAND;
+			this.sendMessage(Messages.GAME_OVER);
 		}
 		if(this.owner.position.y + this.speed.y < SCROLLING_HEIGHT){
 			this.owner.position.y = SCROLLING_HEIGHT;

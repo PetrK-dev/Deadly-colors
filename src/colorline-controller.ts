@@ -16,12 +16,17 @@ export class ColorlineController extends Scrollable{
 
 	onInit(){
 		super.onInit();
+		this.subscribe(Messages.GAME_OVER);
 		this.color = this.owner.asGraphics().tint;
 		this.speed.y = Math.random() * 2 + 1;
 	}
 
 	onMessage(msg: ECS.Message) {
 		super.onMessage(msg);
+		if(msg.action === Messages.GAME_OVER){
+			this.speed.x = 0;
+			this.speed.y = 0;
+		}
 	}
 
 	onUpdate(delta: number, absolute: number) {

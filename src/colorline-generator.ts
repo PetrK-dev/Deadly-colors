@@ -17,17 +17,17 @@ export class ColorlineGenerator extends ECS.Component{
 	public constructor(scene: ECS.Scene) {
 		super();
 		this.scene = scene;
-		this.restart();
+		this.clear();
 	}
 
 	onInit(){
 		this.subscribe(Messages.NEW_JUMP);
 	}
 
-	restart(){
+	clear(){
 		this.colorlines.removeChildren();
 		this.scene.stage.addChild(this.colorlines);
-		this.minChanceOfNewLine = 0.6;
+		this.minChanceOfNewLine = 0.3;
 		this.chanceOfNewLine = this.minChanceOfNewLine;
 	}
 
