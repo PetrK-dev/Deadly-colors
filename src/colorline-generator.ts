@@ -10,6 +10,7 @@ export class ColorlineGenerator extends ECS.Component{
 	colLineHeight: number = 5;
 	lastColor: Colors = Colors.START_BALL_COLOR;
 	newLineChance: number;
+	inLevel: boolean = false;
 	chanceDiff: number = 0.05;
 	genSet: ColorineGenSet = {
 		numOfColors: 3,
@@ -25,7 +26,7 @@ export class ColorlineGenerator extends ECS.Component{
 	}
 
 	onInit(){
-		this.subscribe(Messages.NEW_JUMP, Messages.GAME_RUN);
+		this.subscribe(Messages.NEW_JUMP, Messages.LEVEL_UP, Messages.SCROLL);
 	}
 
 	clear(){
@@ -45,6 +46,15 @@ export class ColorlineGenerator extends ECS.Component{
 				this.newLineChance += this.chanceDiff;
 			}
 		}
+		if(msg.action === Messages.LEVEL_UP){
+			if(this.inLevel){
+				this.clear();
+				this.inLevel = false;
+			}
+		}
+		if(msg.action === Messages.SCROLL){
+			this.inLevel = true;
+		}
 	}
 
 	onUpdate(delta: number, absolute: number): void {
@@ -52,6 +62,7 @@ export class ColorlineGenerator extends ECS.Component{
 
 	setGenerator(colorineGenSet: ColorineGenSet){
 		this.genSet = colorineGenSet;
+		this.newLineChance = this.genSet.newLineMinChance;
 	}
 
 	generateNewColorline(numberOfcolors: number){
