@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH} from './enums-and-constants';
+import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, ColorineGenSet} from './enums-and-constants';
 import {ColorlineController} from './colorline-controller';
 
 
@@ -12,6 +12,7 @@ export class ColorlineGenerator extends ECS.Component{
 	minChanceOfNewLine: number;
 	chanceOfNewLine: number;
 	chanceDiff: number = 0.05;
+	colorineGenSet: ColorineGenSet
 
 
 	public constructor(scene: ECS.Scene) {
@@ -21,7 +22,7 @@ export class ColorlineGenerator extends ECS.Component{
 	}
 
 	onInit(){
-		this.subscribe(Messages.NEW_JUMP);
+		this.subscribe(Messages.NEW_JUMP, Messages.GAME_RUN);
 	}
 
 	clear(){
@@ -41,14 +42,16 @@ export class ColorlineGenerator extends ECS.Component{
 				this.chanceOfNewLine += this.chanceDiff;
 			}
 		}
+		/*if(msg.action === Messages.GAME_RUN){
+			this.generateNewColorline(this.numOfColors);
+		}*/
 	}
 
 	onUpdate(delta: number, absolute: number): void {
 	}
 
-	setGenerator(numOfColors: number, chanceOfNewLine: number){
-		this.numOfColors = numOfColors;
-		this.chanceOfNewLine = chanceOfNewLine;
+	setGenerator(colorineGenSet: ColorineGenSet){
+		this.colorineGenSet = colorineGenSet;
 	}
 
 	generateNewColorline(numberOfcolors: number){

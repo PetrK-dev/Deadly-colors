@@ -15,6 +15,18 @@ export type Vec = {
 	y: number;
 }
 
+export type PlatformGenSet = {
+	numOfColors: number;
+	numOfPlatlines: number;
+	random_x: number;
+}
+
+export type ColorineGenSet = {
+	numOfColors: number;
+	newLineChance: number;
+	speedLine: number;
+}
+
 export enum MoveStates {
 	STAND = 'STAND',
 	JUMP = 'JUMP',
@@ -42,6 +54,8 @@ export enum Colors {
 	YELLOW = 0xFFFF00,
 	PURPLE = 0x800080,
 	GOLDEN = 0xFFD700,
+	LEVEL_COLOR = Colors.GOLDEN,
+	START_BALL_COLOR = Colors.RED, //barva musi byt obsazena v barvach platforem ve hre, jinak nelze hrat
 }
 
 export enum Messages{
@@ -55,6 +69,7 @@ export enum Messages{
 	WELCOME = 'WELCOME',
 	TUTORIAL = 'TUTORIAL',
 	GAME_RUN = 'GAME_RUN',
+	LEVEL_UP = 'LEVEL_UP',
 }
 
 export enum GameState{
@@ -71,3 +86,28 @@ export enum Attrs{
 	COLOR = 'COLOR',
 	MOVE_STATE = 'MOVE_STATE',
 }
+
+//pocet barev
+//pocet platforem,
+//nahodne rozmisteni platforem,
+//pravdepodobnost nove colorline,
+//rychlost colorlines
+
+//pravdepodobnost colorine vertikalni
+//pravdepodobnost colorine horizontalni
+//pravdepodobnost colorine sikme
+
+export enum LvlAttrs{
+	NUM_OF_COLORS,
+	NUM_OF_PLATLINES,
+	RANDOM_X,
+	NEW_LINE_CHANCE ,
+	LINE_SPEED,
+}
+
+export const Levels = [
+	[3, 7, 0, 0.3, 1],
+	[4, 10, 1, 0.6, 1.3],
+	[3, 10, 1, 0.6, 1],
+	[3, 10, 1, 0.6, 1.3],
+];

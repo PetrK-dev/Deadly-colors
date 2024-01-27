@@ -1,7 +1,7 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_COLOR, BALL_SIZE} from './enums-and-constants';
-import {Tags, Colors, Attrs} from './enums-and-constants';
+import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_COLOR, BALL_SIZE, PlatformGenSet, ColorineGenSet} from './enums-and-constants';
+import {Tags, Colors, Attrs, Levels, LvlAttrs} from './enums-and-constants';
 import {BallController} from './ball-controller';
 import { PlatformGenerator } from './platform-generator';
 import { ColorlineGenerator } from './colorline-generator';
@@ -36,17 +36,17 @@ export class Factory{
 	}
 
 	newGame(){
-		let startColor: Colors;
-		startColor = this.platformGenerator.buildStartPlatforms();
-		this.buildBall(startColor);
+		this.loadLevel(1);
+		this.platformGenerator.buildStartPlatforms();
+		this.buildBall(Colors.RED);
 	}
-	restartGame(){
-		let startColor: Colors;
+	restartGame(level: number = 1){
 		this.platformGenerator.clear();
 		this.colorlineGenerator.clear();
-		startColor = this.platformGenerator.buildStartPlatforms();
-		this.ball.tint = startColor;
-		this.ball.assignAttribute(Attrs.COLOR, startColor);
+		this.loadLevel(level);
+		this.platformGenerator.buildStartPlatforms();
+		this.ball.tint = Colors.RED;
+		this.ball.assignAttribute(Attrs.COLOR, this.ball.tint);
 		this.ball.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT - PLATFORM_HEIGHT_DIF + 50);
 	}
 	buildBall(startColor: Colors){
@@ -58,8 +58,34 @@ export class Factory{
 		this.ball.pivot.set(BALL_SIZE/2, BALL_SIZE/2);
 		this.ball.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT - PLATFORM_HEIGHT_DIF + 50);
 		this.ball.addComponent(new BallController());
-		this.ball.tint = startColor;
+		this.ball.tint = Colors.RED;
 		this.scene.stage.addChild(this.ball);
+	}
+
+	loadLevel(level: number){
+		let levelSetting: number[] = Levels[level - 1];
+		let nextLevelSetting: number[] = Levels[level];
+
+		let platformGenSet: PlatformGenSet = {
+			numOfColors: levelSetting[LvlAttrs.NUM_OF_COLORS],
+			numOfPlatlines: levelSetting[LvlAttrs.NUM_OF_PLATLINES],
+			random_x: levelSetting[LvlAttrs.RANDOM_X]
+		};
+		this.platformGenerator.setGenerator(platformGenSet);
+
+		let nextPlatformGenSet: PlatformGenSet = {
+			numOfColors: nextLevelSetting[LvlAttrs.NUM_OF_COLORS],
+			numOfPlatlines: nextLevelSetting[LvlAttrs.NUM_OF_PLATLINES],
+			random_x: nextLevelSetting[LvlAttrs.RANDOM_X]
+		};
+		this.platformGenerator.setNextGenerator(nextPlatformGenSet);
+
+		let colorineGenSet: ColorineGenSet = {
+			numOfColors: levelSetting[LvlAttrs.NUM_OF_COLORS],
+			newLineChance: levelSetting[LvlAttrs.NEW_LINE_CHANCE],
+			speedLine: levelSetting[LvlAttrs.LINE_SPEED]
+		};
+		this.colorlineGenerator.setGenerator(colorineGenSet);
 	}
 	/*
 	loadWelcome(){

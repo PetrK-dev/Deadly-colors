@@ -16,15 +16,20 @@ export class GameManager extends ECS.Component{
 		Factory.getInstance().initialize(this.scene);
 		Factory.getInstance().newGame();
 		this.gameState = GameState.NEW_GAME;
+		this.level = 1;
 	}
 
 	onInit(){
-		this.subscribe( Messages.GAME_OVER );
+		this.subscribe( Messages.GAME_OVER, Messages.LEVEL_UP );
 	}
 
 	onMessage(msg: ECS.Message) {
 		if(msg.action === Messages.GAME_OVER){
 			this.gameState = GameState.GAME_OVER;
+		}
+		if(msg.action === Messages.LEVEL_UP){
+			this.level++;
+			Factory.getInstance().loadLevel(this.level);
 		}
 	}
 
@@ -39,6 +44,7 @@ export class GameManager extends ECS.Component{
 				this.sendMessage(Messages.NEW_GAME);
 				this.gameState = GameState.NEW_GAME;
 				Factory.getInstance().restartGame();
+				this.level = 1;
 				this.keyUp = false;
 			}
 		}else{
