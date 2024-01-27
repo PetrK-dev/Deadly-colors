@@ -23,11 +23,11 @@ export class CollisionHandler extends ECS.Component {
 			if(collides) {
 				let ballColor = ball.getAttribute(Attrs.COLOR);
 				let platfromColor = platform.getAttribute(Attrs.COLOR);
-				if(ballColor === platfromColor && ball.getAttribute(Attrs.MOVE_STATE ) === MoveStates.FALL){
-					this.sendMessage(Messages.NEW_JUMP);
-				}
 				if( ( platfromColor === ballColor || platfromColor === Colors.LEVEL_COLOR ) && ball.getAttribute(Attrs.MOVE_STATE ) === MoveStates.FALL){
 					this.sendMessage(Messages.NEW_JUMP);
+					if(platfromColor === Colors.LEVEL_COLOR){
+						this.sendMessage(Messages.LEVEL_UP);
+					}
 				}
 			}
 		}

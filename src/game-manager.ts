@@ -1,7 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
-import {GameState, Messages} from './enums-and-constants';
+import {GameState, Levels, Messages} from './enums-and-constants';
 import { Factory } from './factory';
-import { SceneManager } from './scene-manager';
 
 export class GameManager extends ECS.Component{
 	scene: ECS.Scene;
@@ -9,6 +8,7 @@ export class GameManager extends ECS.Component{
 	level: number;
 	keyInputComponent: ECS.KeyInputComponent;
 	keyUp: boolean = true;
+	inLevel: boolean = false;
 
 	constructor(scene: ECS.Scene) {
 		super();
@@ -20,7 +20,7 @@ export class GameManager extends ECS.Component{
 	}
 
 	onInit(){
-		this.subscribe( Messages.GAME_OVER, Messages.LEVEL_UP );
+		this.subscribe( Messages.GAME_OVER, Messages.LEVEL_UP, Messages.SCROLL );
 	}
 
 	onMessage(msg: ECS.Message) {
@@ -28,8 +28,16 @@ export class GameManager extends ECS.Component{
 			this.gameState = GameState.GAME_OVER;
 		}
 		if(msg.action === Messages.LEVEL_UP){
-			this.level++;
-			Factory.getInstance().loadLevel(this.level);
+			if(this.inLevel){
+				this.level++;
+				if(this.level < Levels.length){
+					Factory.getInstance().loadLevel(this.level);
+				}
+				this.inLevel = false;
+			}
+		}
+		if(msg.action === Messages.SCROLL){
+			this.inLevel = true;
 		}
 	}
 
@@ -46,6 +54,7 @@ export class GameManager extends ECS.Component{
 				Factory.getInstance().restartGame();
 				this.level = 1;
 				this.keyUp = false;
+				this.inLevel = false;
 			}
 		}else{
 			this.keyUp = true;
