@@ -23,7 +23,7 @@ export type PlatformGenSet = {
 
 export type ColorineGenSet = {
 	numOfColors: number;
-	newLineChance: number;
+	newLineMinChance: number;
 	speedLine: number;
 }
 

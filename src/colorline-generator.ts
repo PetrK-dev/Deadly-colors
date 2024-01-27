@@ -1,18 +1,21 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, ColorineGenSet} from './enums-and-constants';
+import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, ColorineGenSet, Vec} from './enums-and-constants';
 import {ColorlineController} from './colorline-controller';
 
 
 export class ColorlineGenerator extends ECS.Component{
 	scene: ECS.Scene;
 	colorlines: ECS.Container = new ECS.Container(Tags.COLORLINES);
-	lastColor: Colors;
-	numOfColors: number = 3;
-	minChanceOfNewLine: number;
-	chanceOfNewLine: number;
+	colLineHeight: number = 5;
+	lastColor: Colors = Colors.START_BALL_COLOR;
+	newLineChance: number;
 	chanceDiff: number = 0.05;
-	colorineGenSet: ColorineGenSet
+	genSet: ColorineGenSet = {
+		numOfColors: 3,
+		newLineMinChance: 0.5,
+		speedLine: 1
+	};
 
 
 	public constructor(scene: ECS.Scene) {
@@ -28,30 +31,27 @@ export class ColorlineGenerator extends ECS.Component{
 	clear(){
 		this.colorlines.removeChildren();
 		this.scene.stage.addChild(this.colorlines);
-		this.minChanceOfNewLine = 0.3;
-		this.chanceOfNewLine = this.minChanceOfNewLine;
+		this.newLineChance = this.genSet.newLineMinChance;
+		this.colLineHeight = SCENE_HEIGHT * 0.00625;
 	}
 
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP){
 			const randomChance = Math.random();
-			if (randomChance < this.chanceOfNewLine) {
-				this.generateNewColorline(this.numOfColors);
-				this.chanceOfNewLine = this.minChanceOfNewLine;
+			if (randomChance < this.newLineChance) {
+				this.generateNewColorline(this.genSet.numOfColors);
+				this.newLineChance = this.genSet.newLineMinChance;
 			}else{
-				this.chanceOfNewLine += this.chanceDiff;
+				this.newLineChance += this.chanceDiff;
 			}
 		}
-		/*if(msg.action === Messages.GAME_RUN){
-			this.generateNewColorline(this.numOfColors);
-		}*/
 	}
 
 	onUpdate(delta: number, absolute: number): void {
 	}
 
 	setGenerator(colorineGenSet: ColorineGenSet){
-		this.colorineGenSet = colorineGenSet;
+		this.genSet = colorineGenSet;
 	}
 
 	generateNewColorline(numberOfcolors: number){
@@ -62,26 +62,30 @@ export class ColorlineGenerator extends ECS.Component{
 		const randomIndex = Math.floor(Math.random() * selectedColors.length);
 		const randomColor = selectedColors.splice(randomIndex, 1)[0];
 		this.lastColor = randomColor;
-		//alert(`Random Color: ${Colors[randomColor]}`);
+
+		let speed: Vec = { x: 0, y: 2 };
+		speed.y = Math.random() * this.genSet.speedLine + 1;
+
 		this.colorlines.addChild(
 			this.createColorline(
 				0,
-				-100,
+				-75,
 				randomColor as Colors,
 				SCENE_WIDTH,
-				5
+				this.colLineHeight,
+				speed
 			));
 
 	}
 
-	createColorline(pos_x: number, pos_y: number, color: Colors, width: number, height: number): ECS.Graphics {
+	createColorline(pos_x: number, pos_y: number, color: Colors, width: number, height: number, speed: Vec): ECS.Graphics {
 		let colorline = new ECS.Graphics(Tags.COLORLINE);
 		colorline.beginFill(0xFFFFFF);
 		colorline.lineStyle(1, 0x000000);
 		colorline.drawRect(0, 0, width, height);
 		colorline.endFill();
 		colorline.position.set( pos_x, pos_y);
-		colorline.addComponent(new ColorlineController());
+		colorline.addComponent(new ColorlineController(speed));
 		colorline.tint = color;
 		return colorline;
 	}

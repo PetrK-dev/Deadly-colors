@@ -4,7 +4,7 @@ import {Colors, Attrs, Messages, Vec} from './enums-and-constants';
 import {Scrollable} from './scrollable';
 
 export class ColorlineController extends Scrollable{
-	speed: Vec = { x: 0, y: 2 };
+	speed: Vec = { x: 0, y: 0 };
 
 	get color(){
 		return this.owner.getAttribute<Colors>(Attrs.COLOR);
@@ -14,11 +14,15 @@ export class ColorlineController extends Scrollable{
 		this.owner.assignAttribute(Attrs.COLOR, color);
 	}
 
+	constructor(speed: Vec){
+		super();
+		this.speed = speed;
+	}
+
 	onInit(){
 		super.onInit();
 		this.subscribe(Messages.GAME_OVER);
 		this.color = this.owner.asGraphics().tint;
-		this.speed.y = Math.random() * 2 + 1;
 	}
 
 	onMessage(msg: ECS.Message) {
