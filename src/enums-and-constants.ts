@@ -3,7 +3,6 @@ export const SCENE_HEIGHT = 800;
 export const SCROLLING_HEIGHT = SCENE_HEIGHT/2;
 export const RESOLUTION = 1;
 export const BALL_SIZE = 10;
-export const BACK_GROUND_COLOR = 0xFFFFFFF;
 export const GRAVITY = 0.02;
 export const PLAYER_VERTICAL_SPEED = 13;
 export const PLAYER_HORIZONTAL_SPEED = 0.8;
@@ -53,10 +52,15 @@ export enum Colors {
 	GREEN = 0x00FF00,
 	YELLOW = 0xFFFF00,
 	PURPLE = 0x800080,
+	ORANGE = 0xFF8C00,
 	GOLDEN = 0xFFD700,
+	GREY = 0xCCCCCC,
 	LEVEL_COLOR = Colors.GOLDEN,
 	START_BALL_COLOR = Colors.RED, //barva musi byt obsazena v barvach platforem ve hre, jinak nelze hrat
+	BACK_GROUND_COLOR = Colors.GREY,
 }
+
+export const playColors: Colors[] = [Colors.GREEN, Colors.BLUE, Colors.RED, Colors.PURPLE, Colors.ORANGE];
 
 export enum Messages{
 	NEW_JUMP = 'NEW_JUMP',

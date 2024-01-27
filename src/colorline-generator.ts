@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, ColorineGenSet, Vec} from './enums-and-constants';
+import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, ColorineGenSet, Vec, playColors} from './enums-and-constants';
 import {ColorlineController} from './colorline-controller';
 
 
@@ -66,7 +66,7 @@ export class ColorlineGenerator extends ECS.Component{
 	}
 
 	generateNewColorline(numberOfcolors: number){
-		const allColors: Colors[] = [Colors.GREEN, Colors.BLUE, Colors.RED, Colors.YELLOW, Colors.PURPLE];
+		const allColors: Colors[] = playColors;
 		let selectedColors = allColors.slice(0, numberOfcolors);
 		selectedColors = selectedColors.filter(color => color !== this.lastColor);
 

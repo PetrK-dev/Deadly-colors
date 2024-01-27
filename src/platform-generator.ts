@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, PlatformGenSet} from './enums-and-constants';
+import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, PlatformGenSet, playColors} from './enums-and-constants';
 import {PlatformController} from './platform-controller';
 
 
@@ -87,7 +87,7 @@ export class PlatformGenerator extends ECS.Component{
 
 	generateNewLine(){
 
-		const allColors: Colors[] = [Colors.GREEN, Colors.BLUE, Colors.RED, Colors.YELLOW, Colors.PURPLE];
+		const allColors: Colors[] = playColors;
 		const selectedColors = allColors.slice(0, this.genSet.numOfColors);
 
 		const gapBetweenPlatforms = (SCENE_WIDTH - (this.platWidth * this.genSet.numOfColors)) / (this.genSet.numOfColors + 1);

@@ -5,15 +5,14 @@ import {Tags, Colors, Attrs, Levels, LvlAttrs} from './enums-and-constants';
 import {BallController} from './ball-controller';
 import { PlatformGenerator } from './platform-generator';
 import { ColorlineGenerator } from './colorline-generator';
-import { CollisionHandler } from './collision-handler';
-import { SceneManager } from './scene-manager';
-import { GameManager } from './game-manager';
+import { Screener } from './screens';
 
 export class Factory{
 	scene: ECS.Scene;
 	ball: ECS.Graphics;
 	platformGenerator: PlatformGenerator;
 	colorlineGenerator: ColorlineGenerator;
+	screener: Screener;
 
 	private static instance: Factory;
 
@@ -30,6 +29,7 @@ export class Factory{
 		this.scene = scene;
 		this.platformGenerator = new PlatformGenerator(this.scene);
 		this.colorlineGenerator = new ColorlineGenerator(this.scene);
+		this.screener = new Screener();
 
 		this.scene.addGlobalComponent(this.platformGenerator);
 		this.scene.addGlobalComponent(this.colorlineGenerator);
@@ -38,9 +38,11 @@ export class Factory{
 	newGame(){
 		this.loadLevel(1);
 		this.platformGenerator.buildStartPlatforms();
-		this.buildBall(Colors.RED);
+		this.buildBall();
+		this.loadWelcome();
 	}
 	restartGame(level: number = 1){
+		//this.scene.stage.removeChildren();
 		this.platformGenerator.clear();
 		this.colorlineGenerator.clear();
 		this.loadLevel(level);
@@ -49,7 +51,7 @@ export class Factory{
 		this.ball.assignAttribute(Attrs.COLOR, this.ball.tint);
 		this.ball.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT - PLATFORM_HEIGHT_DIF + 50);
 	}
-	buildBall(startColor: Colors){
+	buildBall(){
 		this.ball = new ECS.Graphics(Tags.BALL);
 		this.ball.beginFill(0xFFFFFF);
 		this.ball.lineStyle(2, 0x000000);
@@ -87,18 +89,32 @@ export class Factory{
 		};
 		this.colorlineGenerator.setGenerator(colorineGenSet);
 	}
-	/*
+
 	loadWelcome(){
-		alert(`welcome screen : press space`);
+		this.screener.initialize(this.scene);
+		this.screener.welcomeScreen();
 	}
-	loadTutorial(){
-		alert(`tutorial : press space`);
+
+	readyGame(){
+		this.screener.readyScreen();
 	}
-	loadNewGame(){
-		alert(`new game : press space`);
+
+	clearScreen(){
+		this.screener.clear();
 	}
-	loadGameOver(){
-		alert(`game over : press space`);
+
+	gameOverScreen(level: number){
+		this.screener.gameOverScreen(level);
 	}
-	*/
+
+	score(){
+		const score = new ECS.Builder(this.scene)
+			.localPos(1, 1)
+			.asBitmapText('Score: 0', 'score_font', 2, 0xFFFFFF)
+			.withParent(this.scene.stage)
+			//.withComponent()
+			.build();
+	}
+
+
 }

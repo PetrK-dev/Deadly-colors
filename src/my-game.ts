@@ -30,7 +30,7 @@ class MyGame {
 			notifyFlagChanges: false, // will send message if flags change
 			notifyTagChanges: false, // will send message if tags change
 			debugEnabled: false, // debugging window
-			backgroundColor: BACK_GROUND_COLOR
+			backgroundColor: Colors.BACK_GROUND_COLOR,
 		});
 
 		this.engine.app.loader
