@@ -1,10 +1,11 @@
+export const getBaseUrl = () => (window as any).BASE_URL || '.';
 export const SCENE_WIDTH = 600;
 export const SCENE_HEIGHT = 800;
 export const SCROLLING_HEIGHT = SCENE_HEIGHT/2;
 export const RESOLUTION = 1;
 export const BALL_SIZE = 10;
-export const GRAVITY = 0.02;
-export const PLAYER_VERTICAL_SPEED = 13;
+export const GRAVITY = 0.025;
+export const PLAYER_VERTICAL_SPEED = 14.5;
 export const PLAYER_HORIZONTAL_SPEED = 0.8;
 export const SLIDING = 0.7;
 export const PLATFORM_HEIGHT_DIF = 150;
@@ -56,6 +57,7 @@ export enum Colors {
 	GOLDEN = 0xFFD700,
 	GREY = 0xCCCCCC,
 	LEVEL_COLOR = Colors.GOLDEN,
+	LEVEL_COLOR_DONE = LEVEL_COLOR + 1,
 	START_BALL_COLOR = Colors.RED, //barva musi byt obsazena v barvach platforem ve hre, jinak nelze hrat
 	BACK_GROUND_COLOR = Colors.GREY,
 }
@@ -91,6 +93,16 @@ export enum Attrs{
 	MOVE_STATE = 'MOVE_STATE',
 }
 
+export enum Sounds{
+	MAIN = 'MAIN',
+	JUMP = 'JUMP',
+	COLOR = 'COLOR',
+	CLICK = 'CLICK',
+	LEVEL_UP = 'LEVEL_UP',
+	GAME_OVER = 'GAME_OVER',
+	GAME_OFF = 'GAME_OFF',
+}
+
 //pocet barev
 //pocet platforem,
 //nahodne rozmisteni platforem,
@@ -111,7 +123,7 @@ export enum LvlAttrs{
 
 export const Levels = [
 	[3, 5, 0, 0.3, 1],
-	[4, 5, 1, 0.6, 1.3],
-	[3, 5, 0, 0.6, 1],
-	[4, 7, 1, 0.6, 1.3],
+	[3, 10, 0, 0.6, 1.3],
+	[3, 10, 1, 0.7, 1.3],
+	[3, 10, 1, 0.8, 1.3],
 ];

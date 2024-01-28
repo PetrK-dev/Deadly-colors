@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_COLOR, BALL_SIZE} from './enums-and-constants';
+import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_COLOR, BALL_SIZE, getBaseUrl, Sounds} from './enums-and-constants';
 import {Tags, Colors} from './enums-and-constants';
 import {BallController} from './ball-controller';
 import { PlatformGenerator } from './platform-generator';
@@ -8,11 +8,13 @@ import { Factory } from './factory';
 import { GameManager } from './game-manager';
 import { CollisionHandler } from './collision-handler';
 import { SceneManager } from './scene-manager';
+import PIXISound from 'pixi-sound';
 class MyGame {
 	engine: ECS.Engine;
 
 	constructor() {
 		this.engine = new ECS.Engine();
+		const base_url = getBaseUrl();
 		let canvas = (document.getElementById('gameCanvas') as HTMLCanvasElement);
 
 		// init the game loop
@@ -35,7 +37,11 @@ class MyGame {
 
 		this.engine.app.loader
 			.reset()
-			.add('ghost', 'assets/ghost.png') // load your assets here
+			/*.add('click_sound', './assets/sounds/click.mp4')
+			.add('color_sound' ,'./assets/sounds/color.mp4')
+			.add('jump_sound', './assets/sounds/color.mp4')
+			.add('levelUp_sound', ' ./assets/sounds/color.mp4')
+			.add (Sounds.MAIN, './assets/sounds/main_music.wav')*/
 			.load(() => this.load());
 	}
 
@@ -45,7 +51,18 @@ class MyGame {
 		scene.addGlobalComponent(new CollisionHandler());
 		//scene.addGlobalComponentAndRun(new SceneManager(scene));
 		//scene.addGlobalComponent(new SceneManager(scene));
+		this.loadSounds();
 		scene.addGlobalComponentAndRun(new GameManager(scene));
+
+	}
+	loadSounds(){
+		let base_url = `${getBaseUrl()}/assets/sounds`;
+		PIXISound.add(Sounds.CLICK ,`${base_url}/click.mp4`);
+		PIXISound.add(Sounds.COLOR ,`${base_url}/color.mp4`);
+		PIXISound.add(Sounds.JUMP, `${base_url}/jump.mp4`);
+		PIXISound.add(Sounds.LEVEL_UP, `${base_url}/levelup.mp4`);
+		PIXISound.add (Sounds.MAIN, `${base_url}/main_music.mp4`);
+		PIXISound.add (Sounds.GAME_OFF, `${base_url}/music_off_game.mp4`);
 	}
 }
 // this will create a new instance as soon as this file is loaded

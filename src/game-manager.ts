@@ -1,6 +1,7 @@
 import * as ECS from '../libs/pixi-ecs';
-import {GameState, Levels, Messages} from './enums-and-constants';
+import {GameState, Levels, Messages, Sounds} from './enums-and-constants';
 import { Factory } from './factory';
+import PIXISound from 'pixi-sound';
 
 export class GameManager extends ECS.Component{
 	scene: ECS.Scene;
@@ -13,11 +14,14 @@ export class GameManager extends ECS.Component{
 	constructor(scene: ECS.Scene) {
 		super();
 		this.scene = scene;
-		this.level = 1;
 		Factory.getInstance().initialize(this.scene);
-		Factory.getInstance().newGame(this.level);
+		Factory.getInstance().newGame();
 		Factory.getInstance().loadWelcome();
+		PIXISound.stopAll();
+		PIXISound.play(Sounds.GAME_OFF, { loop: true, volume:0.2});
 		this.gameState = GameState.WELCOME;
+		this.sendMessage(Messages.WELCOME);
+		this.level = 0;
 	}
 
 	onInit(){
@@ -30,17 +34,11 @@ export class GameManager extends ECS.Component{
 			Factory.getInstance().gameOverScreen(this.level);
 		}
 		if(msg.action === Messages.LEVEL_UP){
-			if(this.inLevel){
-				this.level++;
-				if(this.level < Levels.length){
-					Factory.getInstance().loadLevel(this.level);
-				}
-				Factory.getInstance().increaseScore(this.level);
-				this.inLevel = false;
+			this.level++;
+			if(this.level < Levels.length){
+				Factory.getInstance().loadLevel(this.level);
 			}
-		}
-		if(msg.action === Messages.SCROLL){
-			this.inLevel = true;
+			Factory.getInstance().increaseScore(this.level);
 		}
 	}
 
@@ -48,22 +46,27 @@ export class GameManager extends ECS.Component{
 		const keyInputComponent = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_SPACE)){
 			if(this.gameState === GameState.WELCOME && this.keyUp){
+				PIXISound.play(Sounds.CLICK, { volume: 0.2});
 				Factory.getInstance().readyGame();
 				this.gameState = GameState.NEW_GAME;
 				this.keyUp = false;
 			}
 			if(this.gameState === GameState.NEW_GAME && this.keyUp){
+				PIXISound.stopAll();
+				PIXISound.play(Sounds.CLICK, { volume: 0.2});
+				PIXISound.play(Sounds.MAIN, { loop: true, volume:0.2});
 				Factory.getInstance().clearScreen();
 				this.sendMessage(Messages.GAME_RUN);
 				this.gameState = GameState.GAME_RUN;
 				this.keyUp = false;
 			}
 			if(this.gameState === GameState.GAME_OVER && this.keyUp){
+				PIXISound.play(Sounds.CLICK, { volume: 0.2});
 				this.sendMessage(Messages.NEW_GAME);
 				this.gameState = GameState.NEW_GAME;
-				this.level = 1;
-				Factory.getInstance().restartGame(this.level);
+				Factory.getInstance().restartGame();
 				Factory.getInstance().readyGame();
+				this.level = 0;
 				this.keyUp = false;
 				this.inLevel = false;
 			}

@@ -34,7 +34,7 @@ export class PlatformGenerator extends ECS.Component{
 		this.platforms.removeChildren();
 		this.scene.stage.addChild(this.platforms);
 		this.platHeight = SCENE_HEIGHT * 0.013;
-		this.lastPlatformLinePosition_y = SCENE_HEIGHT - this.platHeight + 5;
+		this.lastPlatformLinePosition_y = SCENE_HEIGHT - this.platHeight;
 		this.lineStyle = this.platHeight / 2;
 		this.genSet.random_x = 0;
 		this.platlinesLeft = 0;

@@ -1,6 +1,7 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Tags, Messages, Colors, Attrs, MoveStates} from './enums-and-constants';
+import {Tags, Messages, Colors, Attrs, MoveStates, Sounds} from './enums-and-constants';
+import PIXISound from 'pixi-sound';
 
 export class CollisionHandler extends ECS.Component {
 	onUpdate(delta: number, absolute: number): void {
@@ -23,10 +24,12 @@ export class CollisionHandler extends ECS.Component {
 			if(collides) {
 				let ballColor = ball.getAttribute(Attrs.COLOR);
 				let platfromColor = platform.getAttribute(Attrs.COLOR);
-				if( ( platfromColor === ballColor || platfromColor === Colors.LEVEL_COLOR ) && ball.getAttribute(Attrs.MOVE_STATE ) === MoveStates.FALL){
+				if( ( platfromColor === ballColor || platfromColor === Colors.LEVEL_COLOR || platfromColor === Colors.LEVEL_COLOR_DONE ) && ball.getAttribute(Attrs.MOVE_STATE ) === MoveStates.FALL){
 					this.sendMessage(Messages.NEW_JUMP);
 					if(platfromColor === Colors.LEVEL_COLOR){
 						this.sendMessage(Messages.LEVEL_UP);
+						PIXISound.play(Sounds.LEVEL_UP, {volume:0.4});
+						platform.assignAttribute(Attrs.COLOR, Colors.LEVEL_COLOR_DONE);
 					}
 				}
 			}
@@ -41,8 +44,11 @@ export class CollisionHandler extends ECS.Component {
 
 			const collides = vertIntersection >= 0;
 			if(collides) {
+				let ballColor: Colors = ball.getAttribute(Attrs.COLOR);
 				let colorlineColor: Colors = colorline.getAttribute(Attrs.COLOR);
-				this.sendMessage(Messages.NEW_COLOR, colorlineColor);
+				if( ballColor!==colorlineColor ){
+					this.sendMessage(Messages.NEW_COLOR, colorlineColor);
+				}
 			}
 		}
 	}

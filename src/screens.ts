@@ -168,8 +168,8 @@ export class Screener{
 		const rs = new PIXI.Text('rs!', blueStyle);
 		const tutorialText = new PIXI.Text('Tutorial', bigBlackStyle);
 		const movingText = new PIXI.Text('moving by arrow keys (or A/D)', lowBlackStyle);
-		const savePlatformText = new PIXI.Text('save platform', lowBlackStyle);
-		const colorLineText = new PIXI.Text('changes color of ball', lowBlackStyle);
+		const savePlatformText = new PIXI.Text('level platform', lowBlackStyle);
+		const colorLineText = new PIXI.Text('colorline changes color of ball', lowBlackStyle);
 		const platformText = new PIXI.Text('jump on platform with same color', lowBlackStyle);
 		const gameOver = new PIXI.Text('GAME OVER', lowBlackStyle);
 		const gameOverText = new PIXI.Text('don\'t fall down!', lowBlackStyle);
