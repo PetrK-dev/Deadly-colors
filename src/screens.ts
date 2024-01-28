@@ -303,6 +303,13 @@ export class Screener{
 		this.screen.addChild(yourScore);
 		this.screen.addChild(playAgain);
 	}
+
+	buildScore(score: number){
+		const yourScore = new PIXI.Text('Level:' + score, mediumBlackStyle);
+		yourScore.x = SCENE_WIDTH * 0.01;
+		yourScore.y = SCENE_HEIGHT * 0.006;
+		return yourScore;
+	}
 }
 
 

@@ -10,6 +10,7 @@ import { Screener } from './screens';
 export class Factory{
 	scene: ECS.Scene;
 	ball: ECS.Graphics;
+	score: PIXI.Text;
 	platformGenerator: PlatformGenerator;
 	colorlineGenerator: ColorlineGenerator;
 	screener: Screener;
@@ -35,22 +36,32 @@ export class Factory{
 		this.scene.addGlobalComponent(this.colorlineGenerator);
 	}
 
-	newGame(){
+	newGame(level: number = 1){
 		this.loadLevel(1);
 		this.platformGenerator.buildStartPlatforms();
 		this.buildBall();
-		this.loadWelcome();
+		this.buildScore(level);
 	}
 	restartGame(level: number = 1){
 		//this.scene.stage.removeChildren();
+		this.clear();
+		this.newGame(level);
+		/*this.loadLevel(level);
+		this.platformGenerator.buildStartPlatforms();
+		this.buildBall();*/
+		/*this.ball.tint = Colors.START_BALL_COLOR;
+		this.ball.assignAttribute(Attrs.COLOR, this.ball.tint);
+		this.ball.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT - PLATFORM_HEIGHT_DIF + 50);*/
+	}
+
+	clear(){
 		this.platformGenerator.clear();
 		this.colorlineGenerator.clear();
-		this.loadLevel(level);
-		this.platformGenerator.buildStartPlatforms();
-		this.ball.tint = Colors.START_BALL_COLOR;
-		this.ball.assignAttribute(Attrs.COLOR, this.ball.tint);
-		this.ball.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT - PLATFORM_HEIGHT_DIF + 50);
+		this.scene.stage.destroyChild(this.ball);
+		this.scene.stage.destroyChild(this.score);
+		//this.ball.destroy();
 	}
+
 	buildBall(){
 		this.ball = new ECS.Graphics(Tags.BALL);
 		this.ball.beginFill(0xFFFFFF);
@@ -62,6 +73,17 @@ export class Factory{
 		this.ball.addComponent(new BallController());
 		this.ball.tint = Colors.START_BALL_COLOR;
 		this.scene.stage.addChild(this.ball);
+	}
+
+	buildScore(level: number){
+		this.score = this.screener.buildScore(level);
+		this.scene.stage.addChild(this.score);
+	}
+
+	increaseScore(level: number){
+		this.scene.stage.destroyChild(this.score);
+		this.score = this.screener.buildScore(level);
+		this.scene.stage.addChild(this.score);
 	}
 
 	loadLevel(level: number){
@@ -104,17 +126,8 @@ export class Factory{
 	}
 
 	gameOverScreen(level: number){
+		this.platformGenerator.clear();
+		this.colorlineGenerator.clear();
 		this.screener.gameOverScreen(level);
 	}
-
-	score(){
-		const score = new ECS.Builder(this.scene)
-			.localPos(1, 1)
-			.asBitmapText('Score: 0', 'score_font', 2, 0xFFFFFF)
-			.withParent(this.scene.stage)
-			//.withComponent()
-			.build();
-	}
-
-
 }

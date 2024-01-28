@@ -13,10 +13,11 @@ export class GameManager extends ECS.Component{
 	constructor(scene: ECS.Scene) {
 		super();
 		this.scene = scene;
-		Factory.getInstance().initialize(this.scene);
-		Factory.getInstance().newGame();
-		this.gameState = GameState.WELCOME;
 		this.level = 1;
+		Factory.getInstance().initialize(this.scene);
+		Factory.getInstance().newGame(this.level);
+		Factory.getInstance().loadWelcome();
+		this.gameState = GameState.WELCOME;
 	}
 
 	onInit(){
@@ -34,6 +35,7 @@ export class GameManager extends ECS.Component{
 				if(this.level < Levels.length){
 					Factory.getInstance().loadLevel(this.level);
 				}
+				Factory.getInstance().increaseScore(this.level);
 				this.inLevel = false;
 			}
 		}
@@ -61,7 +63,7 @@ export class GameManager extends ECS.Component{
 				this.gameState = GameState.NEW_GAME;
 				this.level = 1;
 				Factory.getInstance().restartGame(this.level);
-				Factory.getInstance().readyGame();	
+				Factory.getInstance().readyGame();
 				this.keyUp = false;
 				this.inLevel = false;
 			}
