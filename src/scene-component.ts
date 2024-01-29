@@ -274,12 +274,4 @@ export class SceneComponent extends ECS.Component{
 		this.screen.addChild(playAgain);
 		this.screen.addChild(pressRtoLvlOneText);
 	}
-
-	drawRectangle(color: Colors, pos_x: number, pos_y: number, width: number, height: number): PIXI.Graphics {
-		const rectangle = new PIXI.Graphics();
-		rectangle.beginFill(color);
-		rectangle.drawRect(pos_x, pos_y, width, height);
-		rectangle.endFill();
-		return rectangle;
-	}
 }
