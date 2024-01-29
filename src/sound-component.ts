@@ -33,6 +33,7 @@ export class SoundComponent extends ECS.Component{
 			PIXISound.play(Sounds.LEVEL_UP, { volume:0.3});
 		}
 		if(msg.action === Messages.NEW_COLOR){
+			PIXISound.stop(Sounds.COLOR);
 			PIXISound.play(Sounds.COLOR, { volume:0.3});
 		}
 		if(msg.action === Messages.NEW_JUMP){

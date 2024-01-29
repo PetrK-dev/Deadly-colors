@@ -1,6 +1,5 @@
 import * as ECS from '../libs/pixi-ecs';
-import * as PIXI from 'pixi.js';
-import {Colors, PLATFORM_HEIGHT_DIF, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, ColorineGenSet, Vec, playColors, ColorlineTypes} from './enums-and-constants';
+import {Colors, SCENE_HEIGHT, Tags, Messages, SCENE_WIDTH, ColorineGenSet, Vec, playColors, ColorlineTypes} from './enums-and-constants';
 import {ColorlineController} from './colorline-controller';
 
 
@@ -10,7 +9,6 @@ export class ColorlineGenerator extends ECS.Component{
 	colLineHeight: number = 5;
 	lastColor: Colors = Colors.START_BALL;
 	newLineChance: number;
-	inLevel: boolean = false;
 	chanceDiff: number = 0.05;
 	genSet: ColorineGenSet = {
 		numOfColors: 3,
@@ -25,53 +23,57 @@ export class ColorlineGenerator extends ECS.Component{
 		super();
 		this.scene = scene;
 		this.clear();
+		this.scene.stage.addChild(this.colorlines);
+		this.newLineChance = this.genSet.newLineMinChance;
+		this.colLineHeight = SCENE_HEIGHT * 0.00625;
 	}
 
 	onInit(){
 		this.subscribe(Messages.NEW_JUMP, Messages.LEVEL_UP, Messages.SCROLL);
 	}
 
-	clear(){
-		this.colorlines.removeChildren();
-		this.scene.stage.addChild(this.colorlines);
-		this.newLineChance = this.genSet.newLineMinChance;
-		this.colLineHeight = SCENE_HEIGHT * 0.00625;
-	}
-
 	onMessage(msg: ECS.Message){
 		if(msg.action === Messages.NEW_JUMP){
-			const newRandomChance = Math.random();
-			if (newRandomChance < this.newLineChance) {
-				const typeRandomChance = Math.random();
-				if(typeRandomChance < this.genSet.horizontalChance){
-					this.generateNewColorline(ColorlineTypes.HORIZONTAL);
-				}else if(typeRandomChance <= this.genSet.horizontalChance + this.genSet.verticalChance){
-					const verticalRandomChance = Math.random();
-					if(verticalRandomChance < 0.5){
-						//alert(`VERTICAL_LEFT`);
-						this.generateNewColorline(ColorlineTypes.VERTICAL_LEFT);
-					}else{
-						//alert(`VERTICAL_RIGHT:`);
-						this.generateNewColorline(ColorlineTypes.VERTICAL_RIGHT);
-					}
-				}
-				this.newLineChance = this.genSet.newLineMinChance;
-			}else{
-				this.newLineChance += this.chanceDiff;
-			}
+			this.generateNewLine();
 		}
 		if(msg.action === Messages.LEVEL_UP){
-			if(this.inLevel){// toto by melo jit odstranit, staci uz jen volat clear na message
-				this.clear();
-				this.inLevel = false;
-			}
+			this.clear();
 		}
-		if(msg.action === Messages.SCROLL){
-			this.inLevel = true;
+
+	}
+
+	generateNewLine(){
+		const newRandomChance = Math.random();
+
+		if (newRandomChance < this.newLineChance) {
+			this.chooseType();
+			this.newLineChance = this.genSet.newLineMinChance;
+
+		}else{
+			this.newLineChance += this.chanceDiff;
 		}
 	}
 
-	onUpdate(delta: number, absolute: number): void {
+	chooseType(){
+		const typeRandomChance = Math.random();
+
+		if(typeRandomChance < this.genSet.horizontalChance){
+			this.generateNewColorline(ColorlineTypes.HORIZONTAL);
+
+		}else if(typeRandomChance <= this.genSet.horizontalChance + this.genSet.verticalChance){
+			this.chooseVerticalType();
+		}
+	}
+
+	chooseVerticalType(){
+		const verticalRandomChance = Math.random();
+
+		if(verticalRandomChance < 0.5){
+			this.generateNewColorline(ColorlineTypes.VERTICAL_LEFT);
+
+		}else{
+			this.generateNewColorline(ColorlineTypes.VERTICAL_RIGHT);
+		}
 	}
 
 	setGenerator(colorineGenSet: ColorineGenSet){
@@ -170,13 +172,7 @@ export class ColorlineGenerator extends ECS.Component{
 		return colorline;
 	}
 
-	destoryOldColorlines(){
-		for (let i = this.colorlines.children.length - 1; i >= 0; i--) {
-			const colorline = this.colorlines.children[i] as ECS.Graphics;
-			const cBox = colorline.getBounds();
-			if(cBox.top > SCENE_HEIGHT){
-				this.colorlines.removeChild(colorline);
-			}
-		}
+	clear(){
+		this.colorlines.removeChildren();
 	}
 }
