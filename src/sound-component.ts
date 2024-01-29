@@ -4,7 +4,7 @@ import {Messages, Sounds, getBaseUrl} from './enums-and-constants';
 
 export class SoundComponent extends ECS.Component{
 	onInit(): void {
-		this.subscribe(
+		/*this.subscribe(
 			Messages.WELCOME,
 			Messages.GAME_RUN,
 			Messages.GAME_OVER,
@@ -12,7 +12,7 @@ export class SoundComponent extends ECS.Component{
 			Messages.NEW_COLOR,
 			Messages.NEW_JUMP,
 			Messages.CLICK,
-		);
+		);*/
 		this.loadSounds();
 	}
 
