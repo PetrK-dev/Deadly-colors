@@ -1,7 +1,7 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, RESOLUTION, BACK_GROUND_COLOR, BALL_SIZE, PlatformGenSet, ColorineGenSet, Sounds} from './enums-and-constants';
-import {Tags, Colors, Attrs, Levels, LvlAttrs} from './enums-and-constants';
+import {SCENE_HEIGHT, SCENE_WIDTH, PLATFORM_HEIGHT_DIF, BALL_SIZE, PlatformGenSet, ColorineGenSet} from './enums-and-constants';
+import {Tags, Colors, Levels, LvlAttrs} from './enums-and-constants';
 import {BallController} from './ball-controller';
 import { PlatformGenerator } from './platform-generator';
 import { ColorlineGenerator } from './colorline-generator';
@@ -11,6 +11,7 @@ export class Factory{
 	scene: ECS.Scene;
 	ball: ECS.Graphics;
 	score: PIXI.Text;
+	factoryContainer: ECS.Container;
 	platformGenerator: PlatformGenerator;
 	colorlineGenerator: ColorlineGenerator;
 
@@ -27,8 +28,10 @@ export class Factory{
 
 	public initialize(scene: ECS.Scene) {
 		this.scene = scene;
-		this.platformGenerator = new PlatformGenerator(this.scene);
-		this.colorlineGenerator = new ColorlineGenerator(this.scene);
+		this.factoryContainer = new ECS.Container;
+		this.scene.stage.addChild(this.factoryContainer);
+		this.platformGenerator = new PlatformGenerator(this.factoryContainer);
+		this.colorlineGenerator = new ColorlineGenerator(this.factoryContainer);
 
 		this.scene.addGlobalComponent(this.platformGenerator);
 		this.scene.addGlobalComponent(this.colorlineGenerator);
@@ -40,24 +43,17 @@ export class Factory{
 		this.buildBall();
 		this.buildScore(level);
 	}
+
 	restartGame(level: number = 1){
-		//this.scene.stage.removeChildren();
 		this.clear();
 		this.newGame(level);
-		/*this.loadLevel(level);
-		this.platformGenerator.buildStartPlatforms();
-		this.buildBall();*/
-		/*this.ball.tint = Colors.START_BALL_COLOR;
-		this.ball.assignAttribute(Attrs.COLOR, this.ball.tint);
-		this.ball.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT - PLATFORM_HEIGHT_DIF + 50);*/
 	}
 
 	clear(){
 		this.platformGenerator.clear();
 		this.colorlineGenerator.clear();
-		this.scene.stage.destroyChild(this.ball);
-		this.scene.stage.destroyChild(this.score);
-		//this.ball.destroy();
+		this.factoryContainer.destroyChild(this.ball);
+		this.factoryContainer.destroyChild(this.score);
 	}
 
 	buildBall(){
@@ -70,18 +66,18 @@ export class Factory{
 		this.ball.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT - PLATFORM_HEIGHT_DIF + 50);
 		this.ball.addComponent(new BallController());
 		this.ball.tint = Colors.START_BALL;
-		this.scene.stage.addChild(this.ball);
+		this.factoryContainer.addChild(this.ball);
 	}
 
 	buildScore(level: number){
 		this.score = new PIXI.Text('Level:' + level, mediumBlackStyle);
 		this.score.x = SCENE_WIDTH * 0.01;
 		this.score.y = SCENE_HEIGHT * 0.006;
-		this.scene.stage.addChild(this.score);
+		this.factoryContainer.addChild(this.score);
 	}
 
 	increaseScore(level: number){
-		this.scene.stage.destroyChild(this.score);
+		this.factoryContainer.destroyChild(this.score);
 		this.buildScore(level);
 	}
 

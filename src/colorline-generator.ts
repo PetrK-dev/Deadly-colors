@@ -19,11 +19,10 @@ export class ColorlineGenerator extends ECS.Component{
 	};
 
 
-	public constructor(scene: ECS.Scene) {
+	public constructor(factoryContainer: ECS.Container) {
 		super();
-		this.scene = scene;
 		this.clear();
-		this.scene.stage.addChild(this.colorlines);
+		factoryContainer.addChild(this.colorlines);
 		this.newLineChance = this.genSet.newLineMinChance;
 		this.colLineHeight = SCENE_HEIGHT * 0.00625;
 	}

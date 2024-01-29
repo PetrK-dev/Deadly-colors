@@ -47,6 +47,7 @@ export enum Tags{
 	PLATFORM = 'PLATFORM',
 	COLORLINE = 'COLORLINE',
 	COLORLINES = 'COLORLINES',
+	SCORE = 'SCORE',
 }
 
 export enum Colors {

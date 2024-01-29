@@ -22,10 +22,9 @@ export class PlatformGenerator extends ECS.Component{
 	};
 
 
-	public constructor(scene: ECS.Scene) {
+	public constructor(factoryContainer: ECS.Container) {
 		super();
-		this.scene = scene;
-		this.scene.stage.addChild(this.platforms);
+		factoryContainer.addChild(this.platforms);
 		this.platHeight = SCENE_HEIGHT * 0.013;
 		this.clear();
 	}
