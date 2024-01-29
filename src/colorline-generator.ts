@@ -8,7 +8,7 @@ export class ColorlineGenerator extends ECS.Component{
 	scene: ECS.Scene;
 	colorlines: ECS.Container = new ECS.Container(Tags.COLORLINES);
 	colLineHeight: number = 5;
-	lastColor: Colors = Colors.START_BALL_COLOR;
+	lastColor: Colors = Colors.START_BALL;
 	newLineChance: number;
 	inLevel: boolean = false;
 	chanceDiff: number = 0.05;

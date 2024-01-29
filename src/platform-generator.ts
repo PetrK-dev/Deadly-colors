@@ -161,7 +161,7 @@ export class PlatformGenerator extends ECS.Component{
 			this.createPlatform(
 				0,
 				this.lastPlatformLinePosition_y,
-				Colors.LEVEL_COLOR,
+				Colors.LEVEL,
 				SCENE_WIDTH,
 				this.platHeight
 			));

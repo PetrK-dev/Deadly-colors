@@ -58,10 +58,12 @@ export enum Colors {
 	ORANGE = 0xFF8C00,
 	GOLDEN = 0xFFD700,
 	GREY = 0xCCCCCC,
-	LEVEL_COLOR = Colors.GOLDEN,
-	LEVEL_COLOR_DONE = LEVEL_COLOR + 1,
-	START_BALL_COLOR = Colors.RED, //barva musi byt obsazena v barvach platforem ve hre, jinak nelze hrat
-	BACK_GROUND_COLOR = Colors.GREY,
+	LIGHT_GREY = 0xEEEEEE,
+	BLACK = 0X000000,
+	LEVEL = Colors.GOLDEN,
+	LEVEL_DONE = LEVEL + 1,
+	START_BALL = Colors.RED, //barva musi byt obsazena v barvach platforem ve hre, jinak nelze hrat
+	BACKGROUND = Colors.GREY,
 }
 
 export const playColors: Colors[] = [Colors.GREEN, Colors.BLUE, Colors.RED, Colors.PURPLE, Colors.ORANGE];

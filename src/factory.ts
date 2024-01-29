@@ -69,7 +69,7 @@ export class Factory{
 		this.ball.pivot.set(BALL_SIZE/2, BALL_SIZE/2);
 		this.ball.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT - PLATFORM_HEIGHT_DIF + 50);
 		this.ball.addComponent(new BallController());
-		this.ball.tint = Colors.START_BALL_COLOR;
+		this.ball.tint = Colors.START_BALL;
 		this.scene.stage.addChild(this.ball);
 	}
 

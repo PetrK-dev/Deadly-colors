@@ -44,18 +44,18 @@ export class SceneComponent extends ECS.Component{
 		this.scene.stage.addChild(this.screen);
 		this.clear();
 		const backgroundScreen = new PIXI.Graphics();
-		backgroundScreen.beginFill(Colors.BACK_GROUND_COLOR); // Barva pozadí kolem textu
-		backgroundScreen.drawRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT); // Velikost obdélníku
+		backgroundScreen.beginFill(Colors.BACKGROUND);
+		backgroundScreen.drawRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
 		backgroundScreen.endFill();
 
 		const backgroundWelcome = new PIXI.Graphics(); // Barva pozadí kolem textu
-		backgroundWelcome.beginFill(0xEEEEEE);
+		backgroundWelcome.beginFill(Colors.LIGHT_GREY);
 		backgroundWelcome.lineStyle(10, 0x000000);
 		backgroundWelcome.drawRect(SCENE_WIDTH * 0.1, SCENE_HEIGHT * 0.05, SCENE_WIDTH * 0.8, SCENE_HEIGHT * 0.3);
 		backgroundWelcome.endFill();
 
 		const backgroundTutorial = new PIXI.Graphics(); // Barva pozadí kolem textu
-		backgroundTutorial.beginFill(0xEEEEEE);
+		backgroundTutorial.beginFill(Colors.LIGHT_GREY);
 		backgroundTutorial.lineStyle(10, 0x000000);
 		backgroundTutorial.drawRect(SCENE_WIDTH * 0.1, SCENE_HEIGHT * 0.4, SCENE_WIDTH * 0.8, SCENE_HEIGHT * 0.48);
 		backgroundTutorial.endFill();
@@ -75,7 +75,7 @@ export class SceneComponent extends ECS.Component{
 		rightArrow.pivot.set(-5, 20);
 
 		const savePlatform = new ECS.Graphics();
-		savePlatform.beginFill(Colors.LEVEL_COLOR);
+		savePlatform.beginFill(Colors.LEVEL);
 		savePlatform.lineStyle(5, 0x000000);
 		savePlatform.drawRect(0, 0, 70, 10);
 		savePlatform.endFill();
@@ -273,5 +273,13 @@ export class SceneComponent extends ECS.Component{
 		this.screen.addChild(yourScore);
 		this.screen.addChild(playAgain);
 		this.screen.addChild(pressRtoLvlOneText);
+	}
+
+	drawRectangle(color: Colors, pos_x: number, pos_y: number, width: number, height: number): PIXI.Graphics {
+		const rectangle = new PIXI.Graphics();
+		rectangle.beginFill(color);
+		rectangle.drawRect(pos_x, pos_y, width, height);
+		rectangle.endFill();
+		return rectangle;
 	}
 }

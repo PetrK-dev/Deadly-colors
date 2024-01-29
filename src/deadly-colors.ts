@@ -27,7 +27,7 @@ class DeadlyColors {
 			notifyFlagChanges: false, // will send message if flags change
 			notifyTagChanges: false, // will send message if tags change
 			debugEnabled: false, // debugging window
-			backgroundColor: Colors.BACK_GROUND_COLOR,
+			backgroundColor: Colors.BACKGROUND,
 		});
 
 		this.engine.app.loader
