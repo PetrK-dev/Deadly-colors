@@ -1,5 +1,4 @@
 import * as ECS from '../libs/pixi-ecs';
-import * as PIXI from 'pixi.js';
 import {Colors, Attrs, Messages, Vec} from './enums-and-constants';
 import {Scrollable} from './scrollable';
 
