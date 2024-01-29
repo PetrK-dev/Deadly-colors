@@ -2,7 +2,7 @@ import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
 import {GRAVITY, PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED, SLIDING, SCENE_WIDTH, SCENE_HEIGHT, Colors, SCROLLING_HEIGHT, Sounds} from './enums-and-constants';
 import {Vec, MoveStates, MoveActions, Tags, Messages, Attrs} from './enums-and-constants';
-import PIXISound from 'pixi-sound';
+
 export class BallController extends ECS.Component {
 	speed: Vec = { x: 0, y: 0 };
 	tmpPosition_y: number;
@@ -31,12 +31,10 @@ export class BallController extends ECS.Component {
 	}
 	onMessage(msg: ECS.Message): any {
 		if(msg.action === Messages.NEW_JUMP) {
-			PIXISound.play(Sounds.JUMP, {volume:0.2});
 			this.speed.y = -PLAYER_VERTICAL_SPEED;
 			this.moveState = MoveStates.JUMP;
 		}
 		if(msg.action === Messages.NEW_COLOR){
-			PIXISound.play(Sounds.COLOR, {volume:0.3});
 			this.owner.asGraphics().tint = msg.data;
 			this.color = this.owner.asGraphics().tint;
 			 //alert(`Random Color: ${Colors[randomColor]}`);

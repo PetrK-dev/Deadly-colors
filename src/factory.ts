@@ -6,7 +6,6 @@ import {BallController} from './ball-controller';
 import { PlatformGenerator } from './platform-generator';
 import { ColorlineGenerator } from './colorline-generator';
 import { Screener } from './screens';
-import PIXISound from 'pixi-sound';
 
 export class Factory{
 	scene: ECS.Scene;
@@ -129,8 +128,6 @@ export class Factory{
 	}
 
 	gameOverScreen(level: number){
-		PIXISound.stopAll();
-		PIXISound.play(Sounds.GAME_OFF, { loop: true, volume:0.2});
 		this.platformGenerator.clear();
 		this.colorlineGenerator.clear();
 		this.screener.gameOverScreen(level);

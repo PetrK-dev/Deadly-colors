@@ -1,7 +1,7 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
 import {Tags, Messages, Colors, Attrs, MoveStates, Sounds} from './enums-and-constants';
-import PIXISound from 'pixi-sound';
+
 
 export class CollisionHandler extends ECS.Component {
 	onUpdate(delta: number, absolute: number): void {
@@ -28,7 +28,6 @@ export class CollisionHandler extends ECS.Component {
 					this.sendMessage(Messages.NEW_JUMP);
 					if(platfromColor === Colors.LEVEL_COLOR){
 						this.sendMessage(Messages.LEVEL_UP);
-						PIXISound.play(Sounds.LEVEL_UP, {volume:0.4});
 						platform.assignAttribute(Attrs.COLOR, Colors.LEVEL_COLOR_DONE);
 					}
 				}

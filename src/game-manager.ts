@@ -1,7 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import {GameState, Levels, Messages, Sounds} from './enums-and-constants';
 import { Factory } from './factory';
-import PIXISound from 'pixi-sound';
 
 export class GameManager extends ECS.Component{
 	scene: ECS.Scene;
@@ -17,8 +16,6 @@ export class GameManager extends ECS.Component{
 		Factory.getInstance().initialize(this.scene);
 		Factory.getInstance().newGame();
 		Factory.getInstance().loadWelcome();
-		PIXISound.stopAll();
-		PIXISound.play(Sounds.GAME_OFF, { loop: true, volume:0.2});
 		this.gameState = GameState.WELCOME;
 		this.sendMessage(Messages.WELCOME);
 		this.level = 0;
@@ -46,22 +43,20 @@ export class GameManager extends ECS.Component{
 		const keyInputComponent = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_SPACE)){
 			if(this.gameState === GameState.WELCOME && this.keyUp){
-				PIXISound.play(Sounds.CLICK, { volume: 0.2});
+				this.sendMessage(Messages.CLICK);
 				Factory.getInstance().readyGame();
 				this.gameState = GameState.NEW_GAME;
 				this.keyUp = false;
 			}
 			if(this.gameState === GameState.NEW_GAME && this.keyUp){
-				PIXISound.stopAll();
-				PIXISound.play(Sounds.CLICK, { volume: 0.2});
-				PIXISound.play(Sounds.MAIN, { loop: true, volume:0.1});
+				this.sendMessage(Messages.CLICK);
 				Factory.getInstance().clearScreen();
 				this.sendMessage(Messages.GAME_RUN);
 				this.gameState = GameState.GAME_RUN;
 				this.keyUp = false;
 			}
 			if(this.gameState === GameState.GAME_OVER && this.keyUp){
-				PIXISound.play(Sounds.CLICK, { volume: 0.2});
+				this.sendMessage(Messages.CLICK);
 				this.sendMessage(Messages.NEW_GAME);
 				this.gameState = GameState.NEW_GAME;
 				Factory.getInstance().restartGame(this.level);
@@ -72,7 +67,7 @@ export class GameManager extends ECS.Component{
 			}
 		}else if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_R)){
 			if(this.gameState === GameState.GAME_OVER && this.keyUp){
-				PIXISound.play(Sounds.CLICK, { volume: 0.2});
+				this.sendMessage(Messages.CLICK);
 				this.sendMessage(Messages.NEW_GAME);
 				this.gameState = GameState.NEW_GAME;
 				Factory.getInstance().restartGame();

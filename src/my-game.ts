@@ -9,6 +9,7 @@ import { GameManager } from './game-manager';
 import { CollisionHandler } from './collision-handler';
 import { SceneManager } from './scene-manager';
 import PIXISound from 'pixi-sound';
+import { SoundComponent } from './sound-component';
 class MyGame {
 	engine: ECS.Engine;
 
@@ -46,12 +47,11 @@ class MyGame {
 	}
 
 	load() {
+		this.loadSounds();
 		let scene = this.engine.scene;
 		scene.addGlobalComponent(new ECS.KeyInputComponent());
 		scene.addGlobalComponent(new CollisionHandler());
-		//scene.addGlobalComponentAndRun(new SceneManager(scene));
-		//scene.addGlobalComponent(new SceneManager(scene));
-		this.loadSounds();
+		scene.addGlobalComponentAndRun(new SoundComponent());
 		scene.addGlobalComponentAndRun(new GameManager(scene));
 
 	}

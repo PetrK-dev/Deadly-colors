@@ -78,6 +78,7 @@ export enum Messages{
 	TUTORIAL = 'TUTORIAL',
 	GAME_RUN = 'GAME_RUN',
 	LEVEL_UP = 'LEVEL_UP',
+	CLICK = 'CLICK',
 }
 
 export enum GameState{
@@ -118,10 +119,6 @@ export enum ColorlineTypes{
 //pravdepodobnost nove colorline,
 //rychlost colorlines
 
-//pravdepodobnost colorine vertikalni
-//pravdepodobnost colorine horizontalni
-//pravdepodobnost colorine sikme
-
 export enum LvlAttrs{
 	NUM_OF_COLORS,
 	NUM_OF_PLATLINES,
@@ -133,8 +130,8 @@ export enum LvlAttrs{
 }
 
 export const Levels = [
-	[3, 5, 0, 0.3, 1, 1, 0],
-	[3, 5, 1, 0.3, 1.3, 1, 0],
+	[5, 5, 0, 0.3, 1.0, 1, 0],
+	[5, 5, 1, 0.3, 1.3, 1, 0],
 	[4, 5, 0, 0.3, 1.3, 1, 0],
 	[4, 5, 1, 0.3, 1.3, 1, 0],
 ];
