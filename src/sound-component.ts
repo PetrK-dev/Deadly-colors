@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import PIXISound from 'pixi-sound';
-import {Messages, Sounds} from './enums-and-constants';
+import {Messages, Sounds, getBaseUrl} from './enums-and-constants';
 
 export class SoundComponent extends ECS.Component{
 	onInit(): void {
@@ -13,6 +13,7 @@ export class SoundComponent extends ECS.Component{
 			Messages.NEW_JUMP,
 			Messages.CLICK,
 		);
+		this.loadSounds();
 	}
 
 	onMessage(msg: ECS.Message) {
@@ -40,5 +41,15 @@ export class SoundComponent extends ECS.Component{
 		if(msg.action === Messages.CLICK){
 			PIXISound.play(Sounds.CLICK, { volume:0.3});
 		}
+	}
+
+	loadSounds(){
+		let base_url = `${getBaseUrl()}/assets/sounds`;
+		PIXISound.add(Sounds.CLICK ,`${base_url}/click.mp4`);
+		PIXISound.add(Sounds.COLOR ,`${base_url}/color.mp4`);
+		PIXISound.add(Sounds.JUMP, `${base_url}/jump.mp4`);
+		PIXISound.add(Sounds.LEVEL_UP, `${base_url}/levelup.mp4`);
+		PIXISound.add (Sounds.MAIN, `${base_url}/main_music.mp4`);
+		PIXISound.add (Sounds.GAME_OFF, `${base_url}/music_off_game.mp4`);
 	}
 }
