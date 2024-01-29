@@ -42,12 +42,10 @@ export enum MoveActions {
 
 export enum Tags{
 	BALL = 'BALL',
-	COLORING = 'COLORING',
 	PLATFORMS = 'PLATFORMS',
 	PLATFORM = 'PLATFORM',
 	COLORLINE = 'COLORLINE',
 	COLORLINES = 'COLORLINES',
-	SCORE = 'SCORE',
 }
 
 export enum Colors {
@@ -74,11 +72,9 @@ export enum Messages{
 	SCROLL = 'SCROLL',
 	NEW_COLOR = 'NEW_COLOR',
 	NEW_GAME = 'NEW_GAME',
-	START_GAME = 'START_GAME',
 	GAME_OVER = 'GAME_OVER',
 	PLAY_AGAIN = 'PLAY_AGAIN',
 	WELCOME = 'WELCOME',
-	TUTORIAL = 'TUTORIAL',
 	GAME_RUN = 'GAME_RUN',
 	LEVEL_UP = 'LEVEL_UP',
 	CLICK = 'CLICK',
@@ -87,11 +83,9 @@ export enum Messages{
 
 export enum GameState{
 	NEW_GAME = 'NEW_GAME',
-	START_GAME = 'START_GAME',
 	GAME_OVER = 'GAME_OVER',
 	PLAY_AGAIN = 'PLAY_AGAIN',
 	WELCOME = 'WELCOME',
-	TUTORIAL = 'TUTORIAL',
 	GAME_RUN = 'GAME_RUN',
 }
 
@@ -106,7 +100,6 @@ export enum Sounds{
 	COLOR = 'COLOR',
 	CLICK = 'CLICK',
 	LEVEL_UP = 'LEVEL_UP',
-	GAME_OVER = 'GAME_OVER',
 	GAME_OFF = 'GAME_OFF',
 }
 
@@ -122,6 +115,8 @@ export enum ColorlineTypes{
 //nahodne rozmisteni platforem,
 //pravdepodobnost nove colorline,
 //rychlost colorlines
+//pravdepodobnost horizontalni colorline
+//pravdepodobnost vertikalni colorline
 
 export enum LvlAttrs{
 	NUM_OF_COLORS,
