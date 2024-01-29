@@ -64,6 +64,17 @@ export class GameManager extends ECS.Component{
 				PIXISound.play(Sounds.CLICK, { volume: 0.2});
 				this.sendMessage(Messages.NEW_GAME);
 				this.gameState = GameState.NEW_GAME;
+				Factory.getInstance().restartGame(this.level);
+				Factory.getInstance().readyGame();
+				this.level--;
+				this.keyUp = false;
+				this.inLevel = false;
+			}
+		}else if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_R)){
+			if(this.gameState === GameState.GAME_OVER && this.keyUp){
+				PIXISound.play(Sounds.CLICK, { volume: 0.2});
+				this.sendMessage(Messages.NEW_GAME);
+				this.gameState = GameState.NEW_GAME;
 				Factory.getInstance().restartGame();
 				Factory.getInstance().readyGame();
 				this.level = 0;

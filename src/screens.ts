@@ -298,10 +298,15 @@ export class Screener{
 		playAgain.x = SCENE_WIDTH / 2 - playAgain.width / 2;
 		playAgain.y = SCENE_HEIGHT * 0.5;
 
+		const pressRtoLvlOneText = new PIXI.Text('(press R to play from lvl 1)', lowBlackStyle);
+		pressRtoLvlOneText.x = SCENE_WIDTH / 2 - pressRtoLvlOneText.width / 2;
+		pressRtoLvlOneText.y = SCENE_HEIGHT * 0.54;
+
 		this.screen.addChild(backgroundGameOver);
 		this.screen.addChild(gameOver);
 		this.screen.addChild(yourScore);
 		this.screen.addChild(playAgain);
+		this.screen.addChild(pressRtoLvlOneText);
 	}
 
 	buildScore(score: number){

@@ -38,7 +38,7 @@ export class Factory{
 	}
 
 	newGame(level: number = 1){
-		this.loadLevel(1);
+		this.loadLevel(level);
 		this.platformGenerator.buildStartPlatforms();
 		this.buildBall();
 		this.buildScore(level);
