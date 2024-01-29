@@ -6,7 +6,7 @@ export const RESOLUTION = 1;
 export const BALL_SIZE = 10;
 export const GRAVITY = 0.025;
 export const PLAYER_VERTICAL_SPEED = 14.5;
-export const PLAYER_HORIZONTAL_SPEED = 0.8;
+export const PLAYER_HORIZONTAL_SPEED = 0.7;
 export const SLIDING = 0.7;
 export const PLATFORM_HEIGHT_DIF = 150;
 
