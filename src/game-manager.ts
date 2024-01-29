@@ -1,5 +1,5 @@
 import * as ECS from '../libs/pixi-ecs';
-import {GameState, Levels, Messages, Sounds} from './enums-and-constants';
+import {GameState, Levels, Messages} from './enums-and-constants';
 import { Factory } from './factory';
 
 export class GameManager extends ECS.Component{
@@ -13,11 +13,7 @@ export class GameManager extends ECS.Component{
 	constructor(scene: ECS.Scene) {
 		super();
 		this.scene = scene;
-		Factory.getInstance().initialize(this.scene);
-		Factory.getInstance().newGame();
-		this.gameState = GameState.WELCOME;
-		this.sendMessage(Messages.WELCOME);
-		this.level = 0;
+		this.initialize();
 	}
 
 	onInit(){
@@ -26,15 +22,10 @@ export class GameManager extends ECS.Component{
 
 	onMessage(msg: ECS.Message) {
 		if(msg.action === Messages.GAME_OVER){
-			this.gameState = GameState.GAME_OVER;
-			this.sendMessage(Messages.GAME_OVER_WITH_SCORE, this.level);
+			this.gameOver();
 		}
 		if(msg.action === Messages.LEVEL_UP){
-			this.level++;
-			if(this.level < Levels.length){
-				Factory.getInstance().loadLevel(this.level);
-			}
-			Factory.getInstance().increaseScore(this.level);
+			this.levelUp();
 		}
 	}
 
@@ -42,38 +33,66 @@ export class GameManager extends ECS.Component{
 		const keyInputComponent = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_SPACE)){
 			if(this.gameState === GameState.WELCOME && this.keyUp){
-				this.sendMessage(Messages.CLICK);
-				this.sendMessage(Messages.NEW_GAME);
-				this.gameState = GameState.NEW_GAME;
-				this.keyUp = false;
+				this.welcomeToNewGame();
 			}
 			if(this.gameState === GameState.NEW_GAME && this.keyUp){
-				this.sendMessage(Messages.CLICK);
-				this.sendMessage(Messages.GAME_RUN);
-				this.gameState = GameState.GAME_RUN;
-				this.keyUp = false;
+				this.startGame();
 			}
 			if(this.gameState === GameState.GAME_OVER && this.keyUp){
-				this.sendMessage(Messages.CLICK);
-				this.sendMessage(Messages.NEW_GAME);
-				this.gameState = GameState.NEW_GAME;
-				Factory.getInstance().restartGame(this.level);
-				this.level--;
-				this.keyUp = false;
-				this.inLevel = false;
+				this.restartGame(this.level);
 			}
 		}else if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_R)){
 			if(this.gameState === GameState.GAME_OVER && this.keyUp){
-				this.sendMessage(Messages.CLICK);
-				this.sendMessage(Messages.NEW_GAME);
-				this.gameState = GameState.NEW_GAME;
-				Factory.getInstance().restartGame();
-				this.level = 0;
-				this.keyUp = false;
-				this.inLevel = false;
+				this.restartGame(1);
 			}
 		}else{
 			this.keyUp = true;
 		}
+	}
+
+	initialize(){
+		Factory.getInstance().initialize(this.scene);
+		Factory.getInstance().newGame();
+		this.gameState = GameState.WELCOME;
+		this.sendMessage(Messages.WELCOME);
+		this.level = 0;
+	}
+
+	gameOver(){
+		this.gameState = GameState.GAME_OVER;
+		this.sendMessage(Messages.GAME_OVER_WITH_SCORE, this.level);
+	}
+
+	levelUp(){
+		this.level++;
+		if(this.level < Levels.length){
+			Factory.getInstance().loadLevel(this.level);
+		}
+		Factory.getInstance().increaseScore(this.level);
+	}
+
+	welcomeToNewGame(){
+		this.sendMessage(Messages.CLICK);
+		this.sendMessage(Messages.NEW_GAME);
+		this.gameState = GameState.NEW_GAME;
+		this.keyUp = false;
+	}
+
+	startGame(){
+		this.sendMessage(Messages.CLICK);
+		this.sendMessage(Messages.GAME_RUN);
+		this.gameState = GameState.GAME_RUN;
+		this.keyUp = false;
+	}
+
+	restartGame(level: number){
+		this.level = level;
+		this.sendMessage(Messages.CLICK);
+		this.sendMessage(Messages.NEW_GAME);
+		this.gameState = GameState.NEW_GAME;
+		Factory.getInstance().restartGame(this.level);
+		this.level--;
+		this.keyUp = false;
+		this.inLevel = false;
 	}
 }
