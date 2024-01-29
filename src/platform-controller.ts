@@ -1,14 +1,12 @@
 import * as ECS from '../libs/pixi-ecs';
-import * as PIXI from 'pixi.js';
-import {MoveActions, Colors, Attrs, Messages, GRAVITY} from './enums-and-constants';
+import {Colors, Attrs} from './enums-and-constants';
 import {Scrollable} from './scrollable';
 
-const PLATFORM_SPEED = 50;
-
+/* //litle idea to future
 enum PlatformTypes {
 	NOT_MOVING = 0,
 	MOVING = 1,
-}
+}*/
 
 export class PlatformController extends Scrollable{
 
