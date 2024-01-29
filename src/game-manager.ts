@@ -15,7 +15,6 @@ export class GameManager extends ECS.Component{
 		this.scene = scene;
 		Factory.getInstance().initialize(this.scene);
 		Factory.getInstance().newGame();
-		Factory.getInstance().loadWelcome();
 		this.gameState = GameState.WELCOME;
 		this.sendMessage(Messages.WELCOME);
 		this.level = 0;
@@ -28,7 +27,7 @@ export class GameManager extends ECS.Component{
 	onMessage(msg: ECS.Message) {
 		if(msg.action === Messages.GAME_OVER){
 			this.gameState = GameState.GAME_OVER;
-			Factory.getInstance().gameOverScreen(this.level);
+			this.sendMessage(Messages.GAME_OVER_WITH_SCORE, this.level);
 		}
 		if(msg.action === Messages.LEVEL_UP){
 			this.level++;
@@ -44,13 +43,12 @@ export class GameManager extends ECS.Component{
 		if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_SPACE)){
 			if(this.gameState === GameState.WELCOME && this.keyUp){
 				this.sendMessage(Messages.CLICK);
-				Factory.getInstance().readyGame();
+				this.sendMessage(Messages.NEW_GAME);
 				this.gameState = GameState.NEW_GAME;
 				this.keyUp = false;
 			}
 			if(this.gameState === GameState.NEW_GAME && this.keyUp){
 				this.sendMessage(Messages.CLICK);
-				Factory.getInstance().clearScreen();
 				this.sendMessage(Messages.GAME_RUN);
 				this.gameState = GameState.GAME_RUN;
 				this.keyUp = false;
@@ -60,7 +58,6 @@ export class GameManager extends ECS.Component{
 				this.sendMessage(Messages.NEW_GAME);
 				this.gameState = GameState.NEW_GAME;
 				Factory.getInstance().restartGame(this.level);
-				Factory.getInstance().readyGame();
 				this.level--;
 				this.keyUp = false;
 				this.inLevel = false;
@@ -71,7 +68,6 @@ export class GameManager extends ECS.Component{
 				this.sendMessage(Messages.NEW_GAME);
 				this.gameState = GameState.NEW_GAME;
 				Factory.getInstance().restartGame();
-				Factory.getInstance().readyGame();
 				this.level = 0;
 				this.keyUp = false;
 				this.inLevel = false;

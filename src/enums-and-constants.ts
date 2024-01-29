@@ -79,6 +79,7 @@ export enum Messages{
 	GAME_RUN = 'GAME_RUN',
 	LEVEL_UP = 'LEVEL_UP',
 	CLICK = 'CLICK',
+	GAME_OVER_WITH_SCORE = 'GAME_OVER_WITH_SCORE'
 }
 
 export enum GameState{

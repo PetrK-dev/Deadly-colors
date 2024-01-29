@@ -7,9 +7,9 @@ import { PlatformGenerator } from './platform-generator';
 import { Factory } from './factory';
 import { GameManager } from './game-manager';
 import { CollisionHandler } from './collision-handler';
-import { SceneManager } from './scene-manager';
 import PIXISound from 'pixi-sound';
 import { SoundComponent } from './sound-component';
+import { SceneComponent } from './scene-component';
 class MyGame {
 	engine: ECS.Engine;
 
@@ -51,6 +51,7 @@ class MyGame {
 		let scene = this.engine.scene;
 		scene.addGlobalComponent(new ECS.KeyInputComponent());
 		scene.addGlobalComponent(new CollisionHandler());
+		scene.addGlobalComponentAndRun(new SceneComponent(scene));
 		scene.addGlobalComponentAndRun(new SoundComponent());
 		scene.addGlobalComponentAndRun(new GameManager(scene));
 

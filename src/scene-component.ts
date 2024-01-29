@@ -1,79 +1,47 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import { Colors, SCENE_WIDTH, SCENE_HEIGHT } from './enums-and-constants';
+import {Colors, Messages, SCENE_WIDTH, SCENE_HEIGHT } from './enums-and-constants';
+import { bigBlackStyle, redStyle, greenStyle, blueStyle, lowBlackStyle, mediumBlackStyle } from './text-styles';
 
-const bigBlackStyle = new PIXI.TextStyle({
-	fontFamily: 'Arial',
-	fontSize: 34,
-	fill: 0x000000,
-	fontWeight: 'bold',
-});
-
-const mediumBlackStyle = new PIXI.TextStyle({
-	fontFamily: 'Arial',
-	fontSize: 25,
-	fill: 0x000000,
-	fontWeight: 'bold',
-});
-
-const lowBlackStyle = new PIXI.TextStyle({
-	fontFamily: 'Arial',
-	fontSize: 16,
-	fill: 0x000000,
-	fontWeight: 'bold',
-});
-
-const greenStyle = new PIXI.TextStyle({
-	fontFamily: 'Arial',
-	fontSize: 40,
-	fill: Colors.GREEN,
-	fontWeight: 'bold',
-	stroke: 0x000000,
-	strokeThickness: 6,
-	dropShadow: true,
-	dropShadowColor: 0x000000,
-	dropShadowDistance: 10,
-});
-
-const blueStyle = new PIXI.TextStyle({
-	fontFamily: 'Arial',
-	fontSize: 40,
-	fill: Colors.BLUE,
-	fontWeight: 'bold',
-	stroke: 0x000000,
-	strokeThickness: 6,
-	dropShadow: true,
-	dropShadowColor: 0x000000,
-	dropShadowDistance: 10,
-});
-
-const redStyle = new PIXI.TextStyle({
-	fontFamily: 'Arial',
-	fontSize: 40,
-	fill: Colors.RED,
-	fontWeight: 'bold',
-	stroke: 0x000000,
-	strokeThickness: 6,
-	dropShadow: true,
-	dropShadowColor: 0x000000,
-	dropShadowDistance: 10,
-});
-
-const pressSpaceContinueText = new PIXI.Text('press SPACE to CONTINUE', mediumBlackStyle);
-const pressSpaceStartText = new PIXI.Text('press SPACE to START', mediumBlackStyle);
-const pressSpaceAgainText = new PIXI.Text('press SPACE to PLAY AGAIN', mediumBlackStyle);
-
-export class Screener{
+export class SceneComponent extends ECS.Component{
 	screen: ECS.Container;
+	scene: ECS.Scene;
 
-	public initialize(scene: ECS.Scene) {
+	public constructor(scene: ECS.Scene) {
+		super();
+		this.scene = scene;
 		this.screen = new ECS.Container;
-		scene.stage.addChild(this.screen);
+		this.scene.stage.addChild(this.screen);
 	}
+
+	onInit(){
+		this.subscribe(
+			Messages.WELCOME,
+			Messages.NEW_GAME,
+			Messages.GAME_RUN,
+			Messages.GAME_OVER_WITH_SCORE,
+		);
+	}
+
+	onMessage(msg: ECS.Message) {
+		if(msg.action === Messages.WELCOME){
+			this.loadWelcomeScreen();
+		}
+		if(msg.action === Messages.NEW_GAME){
+			this.loadReadyScreen();
+		}
+		if(msg.action === Messages.GAME_RUN){
+			this.clear();
+		}
+		if(msg.action === Messages.GAME_OVER_WITH_SCORE){
+			this.loadGameOverScreen(msg.data);
+		}
+	}
+
 	clear(){
 		this.screen.removeChildren();
 	}
-	welcomeScreen(){
+	loadWelcomeScreen(){
 		this.clear();
 		const backgroundScreen = new PIXI.Graphics();
 		backgroundScreen.beginFill(Colors.BACK_GROUND_COLOR); // Barva pozadí kolem textu
@@ -173,7 +141,7 @@ export class Screener{
 		const platformText = new PIXI.Text('jump on platform with same color', lowBlackStyle);
 		const gameOver = new PIXI.Text('GAME OVER', lowBlackStyle);
 		const gameOverText = new PIXI.Text('don\'t fall down!', lowBlackStyle);
-		const pressSPace = pressSpaceContinueText;
+		const pressSPace = new PIXI.Text('press SPACE to CONTINUE', mediumBlackStyle);
 
 		welcomeText.x = SCENE_WIDTH / 2 - welcomeText.width / 2;
 		welcomeText.y = SCENE_HEIGHT * 0.11;
@@ -269,16 +237,14 @@ export class Screener{
 
 		this.screen.addChild(pressSPace);
 	}
-
-	readyScreen(){
+	loadReadyScreen(){
 		this.clear();
-		const pressSPace = pressSpaceStartText;
+		const pressSPace = new PIXI.Text('press SPACE to START', mediumBlackStyle);
 		pressSPace.x = SCENE_WIDTH / 2 - pressSPace.width / 2;
 		pressSPace.y = SCENE_HEIGHT / 2;
 		this.screen.addChild(pressSPace);
 	}
-
-	gameOverScreen(score: number){
+	loadGameOverScreen(score: number){
 		this.clear();
 		const backgroundGameOver = new PIXI.Graphics(); // Barva pozadí kolem textu
 		backgroundGameOver.beginFill(0xEEEEEE);
@@ -294,7 +260,7 @@ export class Screener{
 		yourScore.x = SCENE_WIDTH / 2 - yourScore.width / 2;
 		yourScore.y = SCENE_HEIGHT * 0.38;
 
-		const playAgain = pressSpaceAgainText;
+		const playAgain = new PIXI.Text('press SPACE to PLAY AGAIN', mediumBlackStyle);
 		playAgain.x = SCENE_WIDTH / 2 - playAgain.width / 2;
 		playAgain.y = SCENE_HEIGHT * 0.5;
 
@@ -308,14 +274,4 @@ export class Screener{
 		this.screen.addChild(playAgain);
 		this.screen.addChild(pressRtoLvlOneText);
 	}
-
-	buildScore(score: number){
-		const yourScore = new PIXI.Text('Level:' + score, mediumBlackStyle);
-		yourScore.x = SCENE_WIDTH * 0.01;
-		yourScore.y = SCENE_HEIGHT * 0.006;
-		return yourScore;
-	}
 }
-
-
-

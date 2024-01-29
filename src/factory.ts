@@ -5,7 +5,7 @@ import {Tags, Colors, Attrs, Levels, LvlAttrs} from './enums-and-constants';
 import {BallController} from './ball-controller';
 import { PlatformGenerator } from './platform-generator';
 import { ColorlineGenerator } from './colorline-generator';
-import { Screener } from './screens';
+import { mediumBlackStyle } from './text-styles';
 
 export class Factory{
 	scene: ECS.Scene;
@@ -13,7 +13,6 @@ export class Factory{
 	score: PIXI.Text;
 	platformGenerator: PlatformGenerator;
 	colorlineGenerator: ColorlineGenerator;
-	screener: Screener;
 
 	private static instance: Factory;
 
@@ -30,7 +29,6 @@ export class Factory{
 		this.scene = scene;
 		this.platformGenerator = new PlatformGenerator(this.scene);
 		this.colorlineGenerator = new ColorlineGenerator(this.scene);
-		this.screener = new Screener();
 
 		this.scene.addGlobalComponent(this.platformGenerator);
 		this.scene.addGlobalComponent(this.colorlineGenerator);
@@ -76,14 +74,15 @@ export class Factory{
 	}
 
 	buildScore(level: number){
-		this.score = this.screener.buildScore(level);
+		this.score = new PIXI.Text('Level:' + level, mediumBlackStyle);
+		this.score.x = SCENE_WIDTH * 0.01;
+		this.score.y = SCENE_HEIGHT * 0.006;
 		this.scene.stage.addChild(this.score);
 	}
 
 	increaseScore(level: number){
 		this.scene.stage.destroyChild(this.score);
-		this.score = this.screener.buildScore(level);
-		this.scene.stage.addChild(this.score);
+		this.buildScore(level);
 	}
 
 	loadLevel(level: number){
@@ -112,24 +111,5 @@ export class Factory{
 			verticalChance: levelSetting[LvlAttrs.VER_COLORLINE_CHANCE]
 		};
 		this.colorlineGenerator.setGenerator(colorineGenSet);
-	}
-
-	loadWelcome(){
-		this.screener.initialize(this.scene);
-		this.screener.welcomeScreen();
-	}
-
-	readyGame(){
-		this.screener.readyScreen();
-	}
-
-	clearScreen(){
-		this.screener.clear();
-	}
-
-	gameOverScreen(level: number){
-		this.platformGenerator.clear();
-		this.colorlineGenerator.clear();
-		this.screener.gameOverScreen(level);
 	}
 }
