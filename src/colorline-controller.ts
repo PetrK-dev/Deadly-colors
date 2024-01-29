@@ -4,6 +4,7 @@ import {Colors, Attrs, Messages, Vec} from './enums-and-constants';
 import {Scrollable} from './scrollable';
 
 export class ColorlineController extends Scrollable{
+	speed: Vec = { x: 0, y: 0 };
 
 	get color(){
 		return this.owner.getAttribute<Colors>(Attrs.COLOR);
