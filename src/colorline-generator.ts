@@ -126,7 +126,7 @@ export class ColorlineGenerator extends ECS.Component{
 		if(lineTypes === ColorlineTypes.HORIZONTAL){
 			size.x = SCENE_WIDTH;
 			size.y = this.colLineHeight;
-		}else if(lineTypes === ColorlineTypes.VERTICAL_LEFT || lineTypes === ColorlineTypes.VERTICAL_RIGHT){
+		}else { //VERTICAL_LEFT || VERTICAL_RIGHT
 			size.x = this.colLineHeight;
 			size.y = SCENE_HEIGHT;
 		}
@@ -152,7 +152,7 @@ export class ColorlineGenerator extends ECS.Component{
 		let scrollable: boolean;
 		if(lineTypes === ColorlineTypes.HORIZONTAL){
 			scrollable = true;
-		}else{
+		}else{ //VERTICAL_LEFT || VERTICAL_RIGHT
 			scrollable = false;
 		}
 		return scrollable;
