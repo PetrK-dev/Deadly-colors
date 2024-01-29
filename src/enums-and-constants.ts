@@ -25,6 +25,8 @@ export type ColorineGenSet = {
 	numOfColors: number;
 	newLineMinChance: number;
 	speedLine: number;
+	horizontalChance: number;
+	verticalChance: number;
 }
 
 export enum MoveStates {
@@ -103,6 +105,13 @@ export enum Sounds{
 	GAME_OFF = 'GAME_OFF',
 }
 
+export enum ColorlineTypes{
+	HORIZONTAL = 1,
+	VERTICAL = 2,
+	VERTICAL_LEFT = 3,
+	VERTICAL_RIGHT = 4,
+}
+
 //pocet barev
 //pocet platforem,
 //nahodne rozmisteni platforem,
@@ -117,13 +126,15 @@ export enum LvlAttrs{
 	NUM_OF_COLORS,
 	NUM_OF_PLATLINES,
 	RANDOM_X,
-	NEW_LINE_CHANCE ,
+	NEW_LINE_CHANCE,
 	LINE_SPEED,
+	HOR_COLORLINE_CHANCE,
+	VER_COLORLINE_CHANCE,
 }
 
 export const Levels = [
-	[3, 5, 0, 0.3, 1],
-	[3, 10, 0, 0.6, 1.3],
-	[3, 10, 1, 0.7, 1.3],
-	[3, 10, 1, 0.8, 1.3],
+	[3, 20, 0, 0.3, 1, 0, 1],
+	[3, 10, 0, 0.6, 1.3, 1, 0],
+	[3, 10, 1, 0.7, 1.3, 1, 0],
+	[3, 10, 1, 0.8, 1.3, 1, 0],
 ];

@@ -108,7 +108,9 @@ export class Factory{
 		let colorineGenSet: ColorineGenSet = {
 			numOfColors: levelSetting[LvlAttrs.NUM_OF_COLORS],
 			newLineMinChance: levelSetting[LvlAttrs.NEW_LINE_CHANCE],
-			speedLine: levelSetting[LvlAttrs.LINE_SPEED]
+			speedLine: levelSetting[LvlAttrs.LINE_SPEED],
+			horizontalChance: levelSetting[LvlAttrs.HOR_COLORLINE_CHANCE],
+			verticalChance: levelSetting[LvlAttrs.VER_COLORLINE_CHANCE]
 		};
 		this.colorlineGenerator.setGenerator(colorineGenSet);
 	}

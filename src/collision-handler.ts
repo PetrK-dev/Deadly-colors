@@ -40,9 +40,10 @@ export class CollisionHandler extends ECS.Component {
 		const bbox = ball.getBounds();
 		for (let colorline of colorlines) {
 			const cBox = colorline.getBounds();
+			const horizIntersection = this.horizIntersection(bbox, cBox);
 			const vertIntersection = this.vertIntersection(bbox, cBox);
 
-			const collides = vertIntersection >= 0;
+			const collides = horizIntersection >= 0 && vertIntersection >= 0;
 			if(collides) {
 				let ballColor: Colors = ball.getAttribute(Attrs.COLOR);
 				let colorlineColor: Colors = colorline.getAttribute(Attrs.COLOR);

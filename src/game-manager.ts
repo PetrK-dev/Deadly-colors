@@ -54,7 +54,7 @@ export class GameManager extends ECS.Component{
 			if(this.gameState === GameState.NEW_GAME && this.keyUp){
 				PIXISound.stopAll();
 				PIXISound.play(Sounds.CLICK, { volume: 0.2});
-				PIXISound.play(Sounds.MAIN, { loop: true, volume:0.2});
+				PIXISound.play(Sounds.MAIN, { loop: true, volume:0.1});
 				Factory.getInstance().clearScreen();
 				this.sendMessage(Messages.GAME_RUN);
 				this.gameState = GameState.GAME_RUN;
