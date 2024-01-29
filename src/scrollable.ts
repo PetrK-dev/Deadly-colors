@@ -1,5 +1,5 @@
 import * as ECS from '../libs/pixi-ecs';
-import {Messages, Vec} from './enums-and-constants';
+import {Messages} from './enums-and-constants';
 
 export class Scrollable extends ECS.Component {
 	activeScroll: boolean = true;
