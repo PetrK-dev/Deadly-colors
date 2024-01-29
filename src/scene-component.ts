@@ -11,7 +11,6 @@ export class SceneComponent extends ECS.Component{
 		super();
 		this.scene = scene;
 		this.screen = new ECS.Container;
-		this.scene.stage.addChild(this.screen);
 	}
 
 	onInit(){
@@ -42,6 +41,7 @@ export class SceneComponent extends ECS.Component{
 		this.screen.removeChildren();
 	}
 	loadWelcomeScreen(){
+		this.scene.stage.addChild(this.screen);
 		this.clear();
 		const backgroundScreen = new PIXI.Graphics();
 		backgroundScreen.beginFill(Colors.BACK_GROUND_COLOR); // Barva pozadí kolem textu
