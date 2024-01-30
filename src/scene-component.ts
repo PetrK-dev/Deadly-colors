@@ -138,6 +138,7 @@ export class SceneComponent extends ECS.Component{
 		const co = new PIXI.Text('co', redStyle);
 		const lo = new PIXI.Text('lo', greenStyle);
 		const rs = new PIXI.Text('rs!', blueStyle);
+		const warningText = new PIXI.Text('(not suitable for the color blind)', lowBlackStyle);
 		const tutorialText = new PIXI.Text('Tutorial', bigBlackStyle);
 		const movingText = new PIXI.Text('moving by arrow keys (or A/D)', lowBlackStyle);
 		const savePlatformText = new PIXI.Text('level platform', lowBlackStyle);
@@ -151,6 +152,7 @@ export class SceneComponent extends ECS.Component{
 
 		welcomeText.x = SCENE_WIDTH / 2 - welcomeText.width / 2;
 		welcomeText.y = SCENE_HEIGHT * 0.11;
+
 		toText.x = SCENE_WIDTH / 2 - toText.width / 2;
 		toText.y = SCENE_HEIGHT * 0.15;
 
@@ -166,6 +168,9 @@ export class SceneComponent extends ECS.Component{
 		lo.y = de.y;
 		rs.x = SCENE_WIDTH / 2 - nameText.width / 2 + de.width + ad.width + ly.width + co.width + lo.width - 70;
 		rs.y = de.y;
+
+		warningText.x = SCENE_WIDTH / 2 - warningText.width / 2 ;
+		warningText.y = SCENE_HEIGHT * 0.275;
 
 		tutorialText.x = SCENE_WIDTH / 2 - tutorialText.width / 2 ;
 		tutorialText.y = SCENE_HEIGHT * 0.42;
@@ -222,6 +227,8 @@ export class SceneComponent extends ECS.Component{
 		this.screen.addChild(welcomeText);
 		this.screen.addChild(toText);
 		this.screen.addChild(de, ad, ly, co, lo, rs);
+
+		this.screen.addChild(warningText);
 
 		this.screen.addChild(tutorialText);
 
