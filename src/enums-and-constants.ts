@@ -78,7 +78,8 @@ export enum Messages{
 	GAME_RUN = 'GAME_RUN',
 	LEVEL_UP = 'LEVEL_UP',
 	CLICK = 'CLICK',
-	GAME_OVER_WITH_SCORE = 'GAME_OVER_WITH_SCORE'
+	GAME_OVER_WITH_SCORE = 'GAME_OVER_WITH_SCORE',
+	WIN = 'WIN',
 }
 
 export enum GameState{
@@ -87,6 +88,7 @@ export enum GameState{
 	PLAY_AGAIN = 'PLAY_AGAIN',
 	WELCOME = 'WELCOME',
 	GAME_RUN = 'GAME_RUN',
+	WIN = 'WIN',
 }
 
 export enum Attrs{
@@ -129,8 +131,11 @@ export enum LvlAttrs{
 }
 
 export const Levels = [
-	[5, 5, 0, 0.3, 1.0, 1, 0],
-	[5, 5, 1, 0.3, 1.3, 1, 0],
-	[4, 5, 0, 0.3, 1.3, 1, 0],
-	[4, 5, 1, 0.3, 1.3, 1, 0],
+	[3, 5, 0, 0.3, 1.0, 1, 0],
+	//[3, 5, 0, 0.5, 1.3, 1, 0],
+	//[3, 5, 0, 0.6, 1.5, 1, 0],
+	[3, 5, 0, 0.6, 1.6, 1, 0],
+	[0, 0, 0, 0.0, 0.0, 0, 0],
 ];
+
+export const maxLevel = Levels.length;

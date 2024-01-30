@@ -1,6 +1,6 @@
 import * as ECS from '../libs/pixi-ecs';
 import * as PIXI from 'pixi.js';
-import {Colors, Messages, SCENE_WIDTH, SCENE_HEIGHT } from './enums-and-constants';
+import {Colors, Messages, SCENE_WIDTH, SCENE_HEIGHT, maxLevel } from './enums-and-constants';
 import { bigBlackStyle, redStyle, greenStyle, blueStyle, lowBlackStyle, mediumBlackStyle } from './text-styles';
 
 export class SceneComponent extends ECS.Component{
@@ -19,6 +19,7 @@ export class SceneComponent extends ECS.Component{
 			Messages.NEW_GAME,
 			Messages.GAME_RUN,
 			Messages.GAME_OVER_WITH_SCORE,
+			Messages.WIN,
 		);
 	}
 
@@ -34,6 +35,9 @@ export class SceneComponent extends ECS.Component{
 		}
 		if(msg.action === Messages.GAME_OVER_WITH_SCORE){
 			this.loadGameOverScreen(msg.data);
+		}
+		if(msg.action === Messages.WIN){
+			this.loadWinScreen();
 		}
 	}
 
@@ -141,6 +145,8 @@ export class SceneComponent extends ECS.Component{
 		const platformText = new PIXI.Text('jump on platform with same color', lowBlackStyle);
 		const gameOver = new PIXI.Text('GAME OVER', lowBlackStyle);
 		const gameOverText = new PIXI.Text('don\'t fall down!', lowBlackStyle);
+		const win = new PIXI.Text('WIN', lowBlackStyle);
+		const winText = new PIXI.Text('go through ' + (maxLevel -1) + ' levels', lowBlackStyle);
 		const pressSPace = new PIXI.Text('press SPACE to CONTINUE', mediumBlackStyle);
 
 		welcomeText.x = SCENE_WIDTH / 2 - welcomeText.width / 2;
@@ -172,34 +178,39 @@ export class SceneComponent extends ECS.Component{
 		movingText.y = SCENE_HEIGHT * 0.5;
 
 		savePlatform.x = SCENE_WIDTH * 0.2;
-		savePlatform.y = SCENE_HEIGHT * 0.585;
+		savePlatform.y = SCENE_HEIGHT * 0.565;
 		savePlatformText.x = SCENE_WIDTH / 2 - tutorialText.width / 2;
-		savePlatformText.y = SCENE_HEIGHT * 0.58;
+		savePlatformText.y = SCENE_HEIGHT * 0.56;
 
 		ballBefore.x = SCENE_WIDTH * 0.2;
-		ballBefore.y = SCENE_HEIGHT * 0.675;
+		ballBefore.y = SCENE_HEIGHT * 0.635;
 		firstArrow.x = SCENE_WIDTH * 0.235;
-		firstArrow.y = SCENE_HEIGHT * 0.675;
+		firstArrow.y = SCENE_HEIGHT * 0.635;
 		colorline.x = SCENE_WIDTH * 0.25;
-		colorline.y = SCENE_HEIGHT * 0.64;
+		colorline.y = SCENE_HEIGHT * 0.60;
 		secondArrow.x = SCENE_WIDTH * 0.272;
-		secondArrow.y = SCENE_HEIGHT * 0.675;
+		secondArrow.y = SCENE_HEIGHT * 0.635;
 		ballAfter.x = SCENE_WIDTH * 0.31;
-		ballAfter.y = SCENE_HEIGHT * 0.675;
+		ballAfter.y = SCENE_HEIGHT * 0.635;
 		colorLineText.x = SCENE_WIDTH / 2 - tutorialText.width / 2;
-		colorLineText.y = SCENE_HEIGHT * 0.66;
+		colorLineText.y = SCENE_HEIGHT * 0.625;
 
 		ball.x = SCENE_WIDTH * 0.2;
-		ball.y = SCENE_HEIGHT * 0.755;
+		ball.y = SCENE_HEIGHT * 0.715;
 		platform.x = SCENE_WIDTH * 0.25;
-		platform.y = SCENE_HEIGHT * 0.748;
+		platform.y = SCENE_HEIGHT * 0.708;
 		platformText.x = SCENE_WIDTH / 2 - tutorialText.width / 2;
-		platformText.y = SCENE_HEIGHT * 0.74;
+		platformText.y = SCENE_HEIGHT * 0.70;
 
 		gameOver.x = SCENE_WIDTH * 0.18;
-		gameOver.y = SCENE_HEIGHT * 0.82;
+		gameOver.y = SCENE_HEIGHT * 0.77;
 		gameOverText.x = SCENE_WIDTH / 2 - tutorialText.width / 2;
-		gameOverText.y = SCENE_HEIGHT * 0.82;
+		gameOverText.y = SCENE_HEIGHT * 0.77;
+
+		win.x = SCENE_WIDTH * 0.24;
+		win.y = SCENE_HEIGHT * 0.825;
+		winText.x = SCENE_WIDTH / 2 - tutorialText.width / 2;
+		winText.y = SCENE_HEIGHT * 0.825;
 
 		pressSPace.x = SCENE_WIDTH / 2 - pressSPace.width / 2;
 		pressSPace.y = SCENE_HEIGHT * 0.93;
@@ -234,6 +245,9 @@ export class SceneComponent extends ECS.Component{
 
 		this.screen.addChild(gameOver);
 		this.screen.addChild(gameOverText);
+
+		this.screen.addChild(win);
+		this.screen.addChild(winText);
 
 		this.screen.addChild(pressSPace);
 	}
@@ -273,5 +287,41 @@ export class SceneComponent extends ECS.Component{
 		this.screen.addChild(yourScore);
 		this.screen.addChild(playAgain);
 		this.screen.addChild(pressRtoLvlOneText);
+	}
+
+	loadWinScreen(){
+		this.clear();
+		const backgroundWin = new PIXI.Graphics(); // Barva pozadí kolem textu
+		backgroundWin.beginFill(0xEEEEEE);
+		backgroundWin.lineStyle(10, 0x000000);
+		backgroundWin.drawRect(SCENE_WIDTH * 0.1, SCENE_HEIGHT * 0.2  , SCENE_WIDTH * 0.8, SCENE_HEIGHT * 0.4 );
+		backgroundWin.endFill();
+
+		const beatIt = new PIXI.Text('!!!  WIN, YOU BEAT IT  !!!', bigBlackStyle);
+		beatIt.x = SCENE_WIDTH / 2 - beatIt.width / 2;
+		beatIt.y = SCENE_HEIGHT * 0.27 ;
+
+		const allLevels = new PIXI.Text('gone through all ' + (maxLevel - 1) + ' levels!', bigBlackStyle);
+		allLevels.x = SCENE_WIDTH / 2 - allLevels.width / 2;
+		allLevels.y = SCENE_HEIGHT * 0.36;
+
+		const comeBack = new PIXI.Text('hope you come back soon to have fun', mediumBlackStyle);
+		comeBack.x = SCENE_WIDTH / 2 - comeBack.width / 2;
+		comeBack.y = SCENE_HEIGHT * 0.47;
+
+		const challenge = new PIXI.Text('and challenge yoursefl again:)', mediumBlackStyle);
+		challenge.x = SCENE_WIDTH / 2 - challenge.width / 2;
+		challenge.y = SCENE_HEIGHT * 0.5;
+
+		const playAgain = new PIXI.Text('press SPACE to PLAY AGAIN', lowBlackStyle);
+		playAgain.x = SCENE_WIDTH / 2 - playAgain.width / 2;
+		playAgain.y = SCENE_HEIGHT * 0.54;
+
+		this.screen.addChild(backgroundWin);
+		this.screen.addChild(beatIt);
+		this.screen.addChild(allLevels);
+		this.screen.addChild(comeBack);
+		this.screen.addChild(challenge);
+		this.screen.addChild(playAgain);
 	}
 }

@@ -1,5 +1,5 @@
 import * as ECS from '../libs/pixi-ecs';
-import {GameState, Levels, Messages} from './enums-and-constants';
+import {GameState, Levels, Messages, maxLevel} from './enums-and-constants';
 import { Factory } from './factory';
 
 export class GameManager extends ECS.Component{
@@ -41,6 +41,9 @@ export class GameManager extends ECS.Component{
 			if(this.gameState === GameState.GAME_OVER && this.keyUp){
 				this.restartGame(this.level);
 			}
+			if(this.gameState === GameState.WIN && this.keyUp){
+				this.restartGame(1);
+			}
 		}else if(keyInputComponent.isKeyPressed(ECS.Keys.KEY_R)){
 			if(this.gameState === GameState.GAME_OVER && this.keyUp){
 				this.restartGame(1);
@@ -65,8 +68,12 @@ export class GameManager extends ECS.Component{
 
 	levelUp(){
 		this.level++;
-		if(this.level < Levels.length){
+		if(this.level !== maxLevel){
 			Factory.getInstance().loadLevel(this.level);
+		}else{
+			this.sendMessage(Messages.WIN);
+			this.gameState = GameState.WIN;
+			return;
 		}
 		Factory.getInstance().increaseScore(this.level);
 	}

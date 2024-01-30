@@ -11,7 +11,7 @@ export class ColorlineGenerator extends ECS.Component{
 	newLineChance: number;
 	chanceDiff: number = 0.05;
 	genSet: ColorineGenSet = {
-		numOfColors: 3,
+		numOfColors: 1,
 		newLineMinChance: 0.5,
 		speedLine: 1,
 		horizontalChance: 1,

@@ -22,7 +22,7 @@ export class BallController extends ECS.Component {
 	}
 
 	onInit(){
-		this.subscribe(Messages.NEW_JUMP, Messages.NEW_COLOR, Messages.GAME_RUN);
+		this.subscribe(Messages.NEW_JUMP, Messages.NEW_COLOR, Messages.GAME_RUN, Messages.WIN);
 		this.moveState = MoveStates.STAND;
 		this.color = this.owner.asGraphics().tint;
 	}
@@ -36,6 +36,9 @@ export class BallController extends ECS.Component {
 		}
 		if(msg.action === Messages.GAME_RUN) {
 			this.moveState = MoveStates.FALL;
+		}
+		if(msg.action === Messages.WIN) {
+			this.moveState = MoveStates.STAND;
 		}
 	}
 

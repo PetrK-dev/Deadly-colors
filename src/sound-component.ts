@@ -4,7 +4,7 @@ import {Messages, Sounds, getBaseUrl} from './enums-and-constants';
 
 export class SoundComponent extends ECS.Component{
 	onInit(): void {
-		/*this.subscribe(
+		this.subscribe(
 			Messages.WELCOME,
 			Messages.GAME_RUN,
 			Messages.GAME_OVER,
@@ -12,7 +12,8 @@ export class SoundComponent extends ECS.Component{
 			Messages.NEW_COLOR,
 			Messages.NEW_JUMP,
 			Messages.CLICK,
-		);*/
+			Messages.WIN,
+		);
 		this.loadSounds();
 	}
 
@@ -28,6 +29,10 @@ export class SoundComponent extends ECS.Component{
 		if(msg.action === Messages.GAME_OVER){
 			PIXISound.stop(Sounds.MAIN);
 			PIXISound.play(Sounds.GAME_OFF, { loop: true, volume:0.2});
+		}
+		if(msg.action === Messages.WIN){
+			PIXISound.stop(Sounds.MAIN);
+			PIXISound.play(Sounds.GAME_OFF, { loop: true, volume:0.4});
 		}
 		if(msg.action === Messages.LEVEL_UP){
 			PIXISound.play(Sounds.LEVEL_UP, { volume:0.3});
