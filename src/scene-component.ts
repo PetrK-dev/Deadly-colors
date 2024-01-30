@@ -274,7 +274,7 @@ export class SceneComponent extends ECS.Component{
 		yourScore.x = SCENE_WIDTH / 2 - yourScore.width / 2;
 		yourScore.y = SCENE_HEIGHT * 0.38;
 
-		const playAgain = new PIXI.Text('press SPACE to PLAY AGAIN', mediumBlackStyle);
+		const playAgain = new PIXI.Text('press SPACE to RESTART LEVEL', mediumBlackStyle);
 		playAgain.x = SCENE_WIDTH / 2 - playAgain.width / 2;
 		playAgain.y = SCENE_HEIGHT * 0.5;
 
