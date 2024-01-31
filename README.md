@@ -1,5 +1,5 @@
 ## Description
-- The game is focused on the player's perception and ability to make quick decisions. As the player progresses through the levels, he will be forced to change his strategy. Don't count on simply jumping, the random object generation won't let you make a single jump the same. That the first level was easy? So prove it, jump in and beat them all, it can't take much time. Instructions on how to play can be found in the game.
+- The Deadly colors is jumping game focused on the player's perception and ability to make quick decisions. As the player progresses through the levels, he will be forced to change his strategy. Don't count on simply jumping, the random object generation won't let you make a single jump the same. That the first level was easy? So prove it, jump in and beat them all, it can't take much time. Instructions on how to play can be found in the game.
 
 - I wish you luck and a lot of fun.
 
